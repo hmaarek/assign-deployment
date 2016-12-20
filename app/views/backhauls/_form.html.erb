@@ -1,0 +1,48 @@
+<%= form_for(@backhaul) do |f| %>
+  <% if @backhaul.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@backhaul.errors.count, "error") %> prohibited this backhaul from being saved:</h2>
+
+      <ul>
+      <% @backhaul.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name, "Backhaul Name" %><br>
+    <%= f.text_field :name %>
+  </div>
+  
+
+<%@rfs_stat= ['No', 'Yes'] %>
+  <div class="field">
+    <%= f.label :rfs_status, "Backhaul RFS?" %><br>
+    <%=f.collection_select(  :rfs_status, @rfs_stat, :to_s, :to_s, include_blank: false) %>
+  </div>
+
+
+  <div class="field">
+    <%=label_tag :devB, "If this Bakchul part of a Ring, select Ring Name:"%> 
+
+  Ring Name:<%=f.collection_select(:ring_id      , Ring.all    , :id, :name          , prompt: true) %>
+  </div>
+
+
+  <div class="field">
+    <%= f.label :description, "Description/Notes" %><br>
+    <%= f.text_area :descript, size:"20x4"%>
+  </div>
+
+  <div class="field">
+<!--   &emsp;  < %=f.label :fiber_in_id%> <br> -->
+  &emsp;  <%=f.number_field :bkh_type, :value=>0 , hidden:true%>
+  </div>
+
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

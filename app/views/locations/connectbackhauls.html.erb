@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Backhauls Connection Results</h1> </font>
+
+<!-- < %=@freePorts%> -->
+<br>
+
+
+<h3>Number of newly connected links: <%=@newlyConnectedFibers%></h3>
+
+List of newly created fibers:
+
+<%@fiberIDList.each do |fid|%>
+<%fiber = Fiberstrand.find(fid)%>
+<li>
+    <lu><%=link_to fiber.name, fiber%></lu>
+</li>
+<%end%>
+
+<%= link_to 'List All Locations', locations_path %> 

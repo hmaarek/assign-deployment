@@ -1,0 +1,63 @@
+<%= form_for(@location) do |f| %>
+  <% if @location.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@location.errors.count, "error") %> prohibited this location from being saved:</h2>
+
+      <ul>
+      <% @location.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  
+  <div class="field">
+    <%= f.label :address %><br>
+    <%= f.text_field :address %>
+  </div>
+
+
+  <%@loc_type= ['CO', 'MDU','SDU','JC'] %>
+  <div class="field">
+    <%= f.label :type, "Location/Building Type : " %>
+    <%=f.collection_select(  :location_type, @loc_type, :to_s, :to_s, include_blank: false) %>
+  </div>
+
+<!--
+shouls disable those coming attributes if type is not MDU:
+http://stackoverflow.com/questions/15055020/how-to-hide-part-of-a-rails-3-form-depending-on-value-selected-from-dropdown-men
+-->
+
+  <%@rfs_stat= ['No', 'Yes'] %>
+  <div class="field">
+    <%= f.label :rfs_status, "RFS Status : " %>
+    <%=f.collection_select(  :rfs_status, @rfs_stat, :to_s, :to_s, include_blank: false) %>
+  </div>
+
+
+  <div class="field">
+    <%= f.label :rfs_date, "RFS Date" %><br>
+    <%= f.date_field :rfs_date %>
+  </div>
+
+
+  <div class="field">
+    <%= f.label :home_passed, "Number of Home Passed" %><br>
+    <%= f.number_field :home_passed %>
+  </div>
+  
+  <div class="field">
+    <%= f.label :home_connected, "Number of Home Connected" %><br>
+    <%= f.number_field :home_connected %>
+  </div>
+
+  
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

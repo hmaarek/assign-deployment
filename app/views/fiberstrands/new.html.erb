@@ -1,0 +1,11 @@
+<%= render 'navbar' %>
+<h1>Adding New Fiber Strand for <font color="#FF0000"><%=@fiberstrand.cable.name%></font> 
+(<%=Location.find_by_id(@fiberstrand.cable.location_a_id).name%> - <%=Location.find_by_id(@fiberstrand.cable.location_b_id).name%>) </h1>
+
+
+ <%= form_for([@fiberstrand.cable, @fiberstrand]) do |f| %>
+    <%= render 'form', :f => f %>
+<%end%>
+
+<!-- /locations/:location_id/comments/ -->
+<%= link_to 'List all Fibers in '+@fiberstrand.cable.name, cable_fiberstrands_path(@fiberstrand.cable) %>

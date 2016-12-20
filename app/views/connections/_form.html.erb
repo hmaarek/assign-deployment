@@ -1,0 +1,67 @@
+<%= form_for(@connection) do |f| %>
+  <% if @connection.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@connection.errors.count, "error") %> prohibited this connection from being saved:</h2>
+
+      <ul>
+      <% @connection.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name, "Connection ID" %><br>
+    <%= f.text_field :name %>
+  </div>
+
+
+  <div class="field">
+    <%=f.label :customer_id, "Select Customer From List"%> <br>
+    <%= f.collection_select( :customer_id, Customer.all, :id, :name, prompt: true) %> [<%= link_to "Create New Customer", new_customer_path, :target => '_new'  %>]
+  </div>
+
+  <div class="field">
+    <%=f.label :backhaul_id, "Select Backhaul/Feeder From List"%> <br>
+    <%= f.collection_select( :backhaul_id, Backhaul.all, :id, :name, prompt: true) %> [<%= link_to "Create New Backhaul/Feeder", new_backhaul_path, :target => '_new'  %>]
+  </div>
+
+
+<%@conn_stat= ['Live', 'Dark', 'Reserved'] %>
+  <div class="field">
+    <%= f.label :status, "Connection Status" %><br>
+    <%=f.collection_select(  :status, @conn_stat, :to_s, :to_s, include_blank: false) %> <font color ="#FF0000">WARNING: Changing Status to [Dark] will clear customer field</font>
+  </div>
+
+
+<%@req_cat= ['Provisioned', 'FRR'] %>
+  <div class="field">
+    <%= f.label :request_category, "Request Category" %><br>
+    <%=f.collection_select(  :request_category, @req_cat, :to_s, :to_s, include_blank: false) %>
+  </div>
+
+
+<%@f_type= ['GPON', 'P2P'] %>
+  <div class="field">
+    <%= f.label :fiber_type, "Terminating Fiber Type" %><br>
+    <%=f.collection_select(  :fiber_type, @f_type, :to_s, :to_s, include_blank: false) %>
+  </div>
+
+  
+  <div class="field">
+    <%= f.label :description, "Description" %><br>
+    <%= f.text_field :description %>
+  </div>
+
+
+  <div class="field">
+    <%= f.label :request_id, "Request ID" %><br>
+    <%= f.text_field :request_id %>
+  </div>
+
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

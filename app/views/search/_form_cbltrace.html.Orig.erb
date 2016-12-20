@@ -1,0 +1,168 @@
+<!-- < %= bootstrap_form_for search_cabletrace_path do |f|%> -->
+
+<h3><font color="OrangeRed">Work Under Progress...!!</font></h3>
+
+<%= form_tag search_cabletrace_path do%>
+
+<div class="container">
+  <div class="row">
+
+    <div class="col-sm-6" style="background-color:lightyellow">
+    <h3> <%=label_tag :devA, "Select Point A:"%> </h3><br>
+
+    <div class="field">
+
+        <div class="col2-sm-4">
+          Type name: <%= text_field_tag(:qa) %> <br>
+          <%= label_tag :a_search_type, "Search Type:" %><br />
+
+          <%= radio_button_tag :a_search_type, "dev" %> <!--, :checked => true -->
+          <%= label_tag :a_search_type, "Search Devices (ODF, JC...etc.)" %>  <!--, :value => "dev"-->
+          <br>
+          <%= radio_button_tag :a_search_type, "loc" %>
+          <%= label_tag :a_search_type, "Seach Locations (COs, MDUs..etc.)"  %>  <!-- , :value => "loc"   -->
+      </div>
+    </div>
+
+
+    <div class="field">
+      <div id="dev_a_select" ><br><I>OR</I> select from <strong>Device</strong> list: <%=collection_select(:device, :devA, Device.all, :id, :name_with_type, prompt: true) %><br></div>
+      <div id="loc_a_select" ><br><I>OR</I> select from <strong>Location</strong> list: <%=collection_select(:location, :locA, Location.all, :id, :name_with_type, prompt: true) %><br></div>
+    </div>
+    
+  </div>
+
+  <div class="col-sm-6" style="background-color:lightblue";>
+    <h3> <%=label_tag :devA, "Select Point B:"%> </h3><br>
+    <div class="field">
+
+        <div class="col2-sm-4">
+          Type name: <%= text_field_tag(:qb) %> <br>
+          <%= label_tag :b_search_type, "Search Type:" %><br />
+
+          <%= radio_button_tag :b_search_type, "dev" %> <!--, :checked => true -->
+          <%= label_tag :b_search_type, "Search Devices (ODF, JC...etc.)" %>  <!--, :value => "dev"-->
+          <br>
+          <%= radio_button_tag :b_search_type, "loc" %>
+          <%= label_tag :b_search_type, "Seach Locations (COs, MDUs..etc.)"  %>  <!-- , :value => "loc"   -->
+      </div>
+    </div>
+
+
+    <div class="field">
+      <div id="dev_b_select" ><br><I>OR</I> select from <strong>Device</strong> list: <%=collection_select(:device, :devB, Device.all, :id, :name_with_type, prompt: true) %><br></div>
+      <div id="loc_b_select" ><br><I>OR</I> select from <strong>Location</strong> list: <%=collection_select(:location, :locB, Location.all, :id, :name_with_type, prompt: true) %><br></idv>
+    </div>
+
+  </div>
+</div>
+
+<br>
+<br>
+<hr>
+
+<div class="container">
+  <div class="row">
+
+    <div class="col-sm-0";>
+    </div>
+
+    <div class="col-sm-3";>
+<br>
+<hr>
+<%=submit_tag("      Search      ") %>
+    </div>
+
+    <div class="col-sm-1";>
+    </div>  
+  </div>
+</div>
+
+<!--
+ <br> 
+ <br>
+  <a href="#" id="advancedsearch">Advanced Search</a>
+
+
+
+<br>
+<br>
+  <p_fAdvanced>
+    
+
+    ------- To Be Implemented... ------------
+    
+    
+  </p_fAdvanced>
+  
+-->
+
+<% end %>
+
+<hr>
+<!--
+<script>
+$(document).ready(function(){
+    $("p_fAdvanced").hide();
+    $("#advancedsearch").click(function(){
+        $("p_fAdvanced").toggle();
+    });
+});
+</script>
+-->
+
+<script>
+
+//Point A:
+  $('input[type=radio][name="a_search_type"]').change(function () {
+  // first: hide all the divs
+  $('#dev_a_select').css("display","none");
+  $('#loc_a_select').css("display","none");
+
+  // then get the div ID to show (i stored it in the "value" of the radio button
+  var selectedButton = $(this).val();
+  // now use jQuery selector and change the display setting of that field
+  //$("#" + fieldToShow).css("display","block");
+  
+  if (selectedButton == 'loc')
+  {
+    $('#loc_a_select').css("display","block");
+    $('#dev_a_select').css("display","none");
+    document.getElementById('device_devA').selectedIndex=0;
+  }
+  else
+  {
+    $('#loc_a_select').css("display","none");
+    document.getElementById('location_locA').selectedIndex =0;
+    
+    $('#dev_a_select').css("display","block");
+  }
+});
+
+//Point B:
+ $('input[type=radio][name="b_search_type"]').change(function () {
+  // first: hide all the divs
+  $('#dev_b_select').css("display","none");
+  $('#loc_b_select').css("display","none");
+
+  // then get the div ID to show (i stored it in the "value" of the radio button
+  var selectedButton = $(this).val();
+  // now use jQuery selector and change the display setting of that field
+  //$("#" + fieldToShow).css("display","block");
+  
+  if (selectedButton == 'loc')
+  {
+    $('#loc_b_select').css("display","block");
+    $('#dev_b_select').css("display","none");
+    document.getElementById('device_devB').selectedIndex=0;
+  }
+  else
+  {
+    $('#loc_b_select').css("display","none");
+    document.getElementById('location_locB').selectedIndex =0;
+    
+    $('#dev_b_select').css("display","block");
+  }
+});
+  
+</script>

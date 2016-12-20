@@ -1,0 +1,19 @@
+
+[1mFrom:[0m /home/ubuntu/workspace/app/models/connection.rb @ line 42 Connection#get_first_port:
+
+    [1;34m41[0m: [32mdef[0m [1;34mget_first_port[0m
+ => [1;34m42[0m:   flist = [1;34;4mFiberstrand[0m.where([31m[1;31m"[0m[31mconnection_id = [1;31m"[0m[31m[0m + [1;36mself[0m.id.to_s)
+    [1;34m43[0m: 
+    [1;34m44[0m:   fportid=[1;34m0[0m
+    [1;34m45[0m:  [1;34m# binding.pry[0m
+    [1;34m46[0m:   flist.each [32mdo[0m |fiber|
+    [1;34m47[0m:     fport = [1;34;4mDevport[0m.find_by_id(fiber.porta)
+    [1;34m48[0m:     fportid=fport.id
+    [1;34m49[0m:     [32mbreak[0m [32mif[0m (fport.fiber_in_id==[1;34m0[0m)
+    [1;34m50[0m:     fportid=[1;34m0[0m
+    [1;34m51[0m:   [32mend[0m
+    [1;34m52[0m:   
+    [1;34m53[0m:   fportid
+    [1;34m54[0m:   
+    [1;34m55[0m: [32mend[0m
+

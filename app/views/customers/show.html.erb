@@ -1,0 +1,140 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Customer Information for <font color="#FF0000"><%=@customer.name%></h1> </font>
+
+    <style>
+    table {
+        width: 50%;
+    }
+    
+
+    table, th, td {
+        border-collapse: collapse;
+        align ="left"
+        
+    }
+    
+    tr{
+        border: 0px solid black;
+    }
+
+    table#t02, th {
+    
+        text-align: center;
+        border: 1px solid #e0e0eb;
+
+    }
+    
+    table#t02 tr {
+        border: 1px solid #e0e0eb;
+    }
+    
+    table#t02 td{
+        border: 1px solid #e0e0eb;
+    }
+    
+    
+    table#t02 th {
+        text-align: center;
+    }
+
+    </style>
+
+<table>
+<tr>
+   <td>
+      <p>
+        <strong>Customer Name:</strong>
+        <%= @customer.name %>
+      </p>
+      <p>
+      <strong>Contact Name:</strong>
+      <%=@customer.contact_name %>
+      
+      </p>
+      <p>
+      <strong>Contact Title:</strong>
+      <%=@customer.contact_title%>
+      </p>
+      <p>
+      <strong>Contact Phone:</strong>
+      <%=@customer.contact_phone%>
+      </p>
+      
+      <p>
+      <strong>Notes</strong>
+      <%= @customer.notes %>
+      <br>
+   </td>
+
+   <td align="left">
+      <div class="image">
+      
+      <!--<h2>< %= @customer.name %></h2> -->
+      <%= image_tag @customer.avatar.url %>
+      </div>
+   </td>
+</tr>
+
+
+</table>
+<br>
+<hr>
+
+<!-- connections bound to that customer: ---->
+<h3>Connections for <%=@customer.name%></h3>
+<%connections = Connection.where("customer_id = '" + @customer.id.to_s + "'")%>
+<table>
+    <tr>
+      <th>Connection ID</th>
+      <th>Connection Status </th>
+    </tr>
+
+
+
+    <%connections.each do |conn|%>
+        <tr>
+            <%connName  =conn.name%>
+            <%connStatus  =conn.status%>
+            <%color = "BLACK"%>
+            <%color = "OrangeRed" if connStatus.casecmp("LIVE")==0%>
+            <%color = "BLUE" if connStatus.casecmp("RESERVED")==0%>
+    
+            <td align="center"><%=link_to connName,  conn%></td>
+            <td align="center" ><font color="<%=color%>"><%=connStatus%></font></td>
+        </tr>
+    <%end%>
+</table>
+
+<hr>
+
+<h3>Contracts signed by <%=@customer.name%>:</h3>
+<br>
+
+<table id="t02">
+        <tr>
+          <th>Contract Name</th>
+          <th>Signed Date</th>
+          <th>Expiring Date</th>
+          <th>Days to Expire</th>
+        </tr>
+    
+    <%@customer.list_contracts.each do |contract|%>
+        <tr>
+            <td align="center"><%= link_to contract.contract_name, contract %></td>
+            <td align="center"><%= contract.signed_date.day %>/<%= Date::MONTHNAMES[contract.signed_date.month] %>/<%= contract.signed_date.year %></td>
+            <td align="center"><%= contract.expiring_date.day %>/<%= Date::MONTHNAMES[contract.expiring_date.month] %>/<%= contract.expiring_date.year %></td>
+            <td align="center"><%=(contract.expiring_date-Date.today).to_i%></td>
+        </tr>
+    <%end%>
+</table>
+
+<br>
+
+
+
+
+<%= link_to 'Edit', edit_customer_path(@customer) %> |
+<!-- < %= link_to 'Add New Rack', new_customer_net_rack_path(@customer) % > |  -->
+<%= link_to 'List All Customers', customers_path %> |
+<%= link_to 'Add a Contract to this Customer', add_contract_path(@customer) %>

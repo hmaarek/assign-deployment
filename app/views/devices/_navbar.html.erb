@@ -1,0 +1,6 @@
+<% loc = Location.find_by_id(NetRack.find_by_id(@device.net_rack_id).location_id) %>
+<% rack = NetRack.find_by_id(@device.net_rack_id) %>
+<%=link_to loc.name , location_path(loc)%> /
+<%=link_to rack.name, net_rack_path(rack)%> / 
+<%=@device.name%>
+<hr>

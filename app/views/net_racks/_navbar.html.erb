@@ -1,0 +1,4 @@
+<% loc = Location.find_by_id(@net_rack.location_id) %>
+<%=link_to loc.name , location_path(loc)%> /
+<%=@net_rack.name%>
+<hr>

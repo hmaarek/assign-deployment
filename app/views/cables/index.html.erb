@@ -1,0 +1,36 @@
+<p id="notice"><%= notice %></p>
+<h1>Listing All Cables</h1>
+
+<table class="tableIndex">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Point A</th>
+      <th>Point B</th>
+      <th>Total Capacity (fibers)</th>
+      <th>Free Fibers</th>
+      <th colspan=2>Action</th>
+    </tr>
+  </thead>
+
+    <% @cables.each do |cable| %>
+
+      <tr>
+        <td align="center"><%= link_to cable.name, cable %></td>
+
+        <td align="center"><%= link_to Location.find(cable.location_a_id).name, location_path(cable.location_a_id) %></td>
+        <td align="center"><%= link_to Location.find(cable.location_b_id).name, location_path(cable.location_b_id) %></td>
+        <td align="center"><%=cable.size %></td>
+        <td align="center"><%=cable.size-cable.fiberstrands.count %></td>
+        <%if (logged_in? && current_user.user_type<=1) %>
+          <td><%= link_to image_tag("/images/Edit_s2.png"), edit_cable_path(cable) %></td>
+          <td><%= link_to image_tag("/images/Delete_s2.png"), cable, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <%end%>
+      </tr>
+    <% end %>
+
+</table>
+
+<br>
+
+<%= link_to 'Add New Cable', new_cable_path %>

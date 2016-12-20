@@ -1,0 +1,30 @@
+<%if @search_subject== "location_search"%>
+        <h1>Search Locations</h1>
+<%elsif @search_subject== "cable_search"%>
+        <h1>Search Cables</h1>
+<%elsif @search_subject== "cable_trace"%>
+        <h1>Search Connections between 2 Points</h1>
+<%elsif @search_subject== "connections_search"%>
+        <h1>Search Connections</h1>
+<%else%>
+        <h1>Search Not Implemented Yet!</h1>
+<%end%>
+<br>
+
+<!-- VAR search_subject = < %= @search_subject%> -->
+
+
+    <%if @search_subject== "location_search"%>
+            <%= render 'form_locsearch' %>
+    <%elsif @search_subject== "cable_search"%>
+            <%= render 'form_cblsearch' %>
+    <%elsif @search_subject== "cable_trace"%>
+            <%= render 'form_cbltrace' %>
+    <%elsif @search_subject== "connections_search"%>
+            <%= render 'form_connsearch' %>
+    <%elsif @search_subject== "navigate_search"%>
+            <%= render 'form_navigatesearch' %>
+
+    <%else%>
+            <br>to be developed today<br>
+    <%end%>

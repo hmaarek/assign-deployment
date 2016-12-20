@@ -1,0 +1,47 @@
+
+<%net_rack= NetRack.find(params[:net_rack_id])%>
+<%loc = Location.find_by_id(net_rack.location_id)%>
+<%=link_to loc.name , location_path(loc)%> /
+<%=link_to net_rack.name, net_rack_path(net_rack)%> / 
+
+<hr>
+<h1>Listing Termination Devices for <font color="#FF0000"><%= net_rack.name %></h1></font>
+
+<%if net_rack.devices.count>0%>
+  
+  <table>
+    <tr>
+      <th>Name | </th>
+      <th>Type | </th>
+      <th>No. of Ports</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  
+  <% @devices.each do |dev| %>
+    <tr>
+      <td align="center"><%= link_to dev.name,  [dev]%></td>
+      <td align="center"><%= dev.device_type %></td>
+      <td align="center"><%= dev.devports.count %></td>
+  
+      <!-- /location/:location_id/net_rack/:id -->
+      <!-- <td>< % = link_to 'Show', [nr.location, nr] %></td> -->
+      <!-- /location/:location_id/net_rack/:id/edit -->
+      <%if (logged_in? && current_user.user_type<=1) %>
+        <td><%= link_to image_tag("/images/Edit_s2.png"), edit_device_path(dev)%></td>
+        <!-- /location/:location_id/net_rack/:id -->
+        <td><%= link_to image_tag("/images/Delete_s2.png"), [dev], data: { confirm: "Are you sure?" }, :method => :delete %></td>
+      <%end%>     
+    </tr>
+  <% end %>
+  </table>
+  
+  <br />
+  
+<%else%>
+  <h3> <font color="#FF0000">--- No Devices installed in this rack ---</h3></font>
+<%end%>
+
+<%= link_to "back to " + net_rack.name, net_rack_path(net_rack) %>
+<%= link_to_if (logged_in? && current_user.user_type<=1),  'Add New Device', new_net_rack_device_path %> <!-- /locations/:location_id/net_racks/new -->

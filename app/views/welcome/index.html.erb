@@ -1,0 +1,117 @@
+
+<title>Qbn Assign: home page</title>
+<!--
+<a href="http://qnbn.qa">
+<img src="/images/Qnbn Logo.png" style="float:right">
+</a>
+-->
+<h1> <font color="#6600cc">Assign</font></h1>
+<p>Property of Qnbn: Qatar National Broadband Network</p>
+
+<!--
+<hr>
+<img src="/images/nw-resmag.jpg" style="float:center; width:750px;height:320px ;border:2" >
+<hr>
+<br>
+<br>
+<%unless flash[:notice].blank? %>
+    <script>    alert("<%=flash[:notice] %>"); </script>
+<%end%>
+-->
+<br>
+<hr>
+
+<div class="container">
+  Welcome! It is: <font color="BLUE"><I><%= Time.zone.now.strftime("%A %d-%b-%Y")%></I></font>  <!--  time: %H:%M:%S -->
+  <div class="row">
+    <div class="col-sm-6" >
+
+<table class="table table-condensed">
+    <tr>
+    <th width=180>Network Summary</th>
+    <th scope="col"></th>
+    </tr>
+    
+    <tr class="info">
+    <th scope="row">Total Network Utlization</th>
+    <td align="left"><strong><%=(((Connection.getConnLive+Connection.getConnRes)*100) / Connection.count)%>%</strong></td>
+    </tr>
+
+    
+    <tr>
+    <th scope="row">Total Live Connections</th>
+    <td  align="left"><%=Connection.getConnLive%></td>
+    </tr>
+    
+    <tr>
+    <th scope="row">Total Reserved Connections</th>
+    <td align="left"><%=Connection.getConnRes%></td>
+    </tr>
+    
+    <tr>
+    <th scope="row">Total Free Connections</th>
+    <td align="left"><%=(Connection.count - Connection.getConnRes - Connection.getConnLive)%></td>
+    </tr>
+    
+    
+    <tr>
+    <th scope="row">Total Ports</th>
+    <td align="left"><%=Devport.count%></td>
+    </tr>
+
+    <tr>
+    <th scope="row">Total Fiber Strands</th>
+    <td align="left"><%=Fiberstrand.count%></td>
+    </tr>
+
+    <tr>
+    <th scope="row">Total Cables</th>
+    <td align="left"><%=Cable.count%></td>
+    </tr>
+
+    <tr>
+    <th scope="row">Total Feeders</th>
+    <td align="left"><%=Backhaul.getTotalFeeders%></td>
+    </tr>
+
+    <tr>
+    <th scope="row">Total Backhauls</th>
+    <td align="left"><%= Backhaul.getTotalBakhauls%></td>
+    </tr>
+
+    <tr>
+    <th scope="row">Total Customers</th>
+    <td align="left"><%=Customer.count%></td>
+    </tr>
+
+</table>
+
+    </div>
+<br>
+<br>
+    <div class="col-sm-6" style="background-color:lightblue";>
+        <strong>Newly Added Elements Last week:<br></strong>
+        <li><%=Connection.where("created_at BETWEEN  date('now','-7 days') AND date('now')").count%> Connection(s)</li>
+        <li><%=Cable.where("created_at BETWEEN  date('now','-7 days') AND date('now')").count%> Cables(s)</li>
+        <li><%=Fiberstrand.where("created_at BETWEEN  date('now','-7 days') AND date('now')").count%> Fiber(s)</li>
+        <li><%=Devport.where("created_at BETWEEN  date('now','-7 days') AND date('now')").count%> Port(s)</li>
+        <li><%=Customer.where("created_at BETWEEN  date('now','-7 days') AND date('now')").count%> Customer(s)</li>
+        
+        
+
+    </div>
+  </div>
+</div>
+
+<hr>
+
+
+<br><%= link_to "Import External Data", import_import_path %>
+
+<!--
+<br>
+<br><br>
+< % = link_to "List Racks", controller: 'location_net_racks_path' % > | 
+-->
+
+

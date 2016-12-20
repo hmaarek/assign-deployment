@@ -1,0 +1,61 @@
+<%= form_for(@contract) do |f| %>
+  <% if @contract.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@contract.errors.count, "error") %> prohibited this contract from being saved:</h2>
+
+      <ul>
+      <% @contract.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<%customer_id = params[:customerid]%>
+<%if !customer_id.nil?%>
+<h2>
+Customer: <font color="006600"><%=(Customer.find_by_id(customer_id)).name%> </font>
+</h2>
+<br>
+<%end%>
+
+
+  <div class="field">
+    <%= f.label :contract_name, "Contract Name" %><br>
+    <%= f.text_field :contract_name %>
+  </div>
+
+
+<%if customer_id.nil?%>
+  <div class="field">
+    <%=f.label :customer_id, "Select Customer From List"%> <br>
+    <%= f.collection_select( :customer_id, Customer.all, :id, :name, prompt: true) %> [<%= link_to "Create New Customer", new_customer_path, :target => '_new'%>]
+  </div>
+<%else%>
+  <%= f.number_field :customer_id, value: customer_id, hidden:true %>
+<%end%>
+
+
+  <div class="field">
+    <%= f.label :singed_date, "Signed Date" %><br>
+    <%= f.date_field :signed_date %>
+  </div>
+
+
+  <div class="field">
+    <%= f.label :expiring_date, "Signed Date" %><br>
+    <%= f.date_field :expiring_date %>
+  </div>
+
+
+  <div class="field">
+    <%= f.label :description, "Description" %><br>
+    <%= f.text_area :description, size:"20x4"%>
+  </div>
+
+
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

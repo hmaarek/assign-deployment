@@ -1,0 +1,36 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Rings</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th colspan=2>Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @rings.each do |ring| %>
+      <tr>
+        <td><%= link_to ring.name, ring %></td>
+        <td><%= ring.description %></td>
+<!--        <td>< %= link_to 'Show', ring %></td> -->
+        <%if (logged_in? && current_user.user_type<=1) %>
+          <td><%= link_to image_tag("/images/Edit_s2.png"), edit_ring_path(ring)  %></td>
+          <td><%= link_to image_tag("/images/Delete_s2.png"), ring, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <%end%>
+        
+        
+<!--        <td>< %= link_to 'Edit', edit_ring_path(ring) %></td>
+        <td>< %= link_to 'Destroy', ring, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+-->
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Ring', new_ring_path %>

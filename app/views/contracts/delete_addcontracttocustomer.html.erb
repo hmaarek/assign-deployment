@@ -1,0 +1,5 @@
+<h1>Adding New Contract to <%=(Customer.find_by_id(params[:customerid]).name)%></h1>
+
+<%= render 'formaddcust' %>
+
+<%= link_to 'List All Contracts', contracts_path %>

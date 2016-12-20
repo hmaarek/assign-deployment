@@ -1,0 +1,121 @@
+
+<body>
+<a href="http://qnbn.qa">
+<img src="/images/qnbn-small.png" style="float:right">
+</a>
+
+<!-- <h3> <font color="#6600cc">FCap </font></h1> -->
+<p class="small"><h3><i>Qnbn Fiber Network Management System</i></h3></p>
+<hr>
+
+
+<header class="navbar navbar-fixed-top navbar-inverse">
+<div class="navcontainer">
+<%= link_to image_tag("/images/AssignLogo2_w60.png"), root_path, id: "logo"%>
+<nav>
+  <ul class="nav navbar-nav navbar-right">
+  	<!-- < %user_id = session[:user_id]%> -->
+  	<!-- < %if !user_id.nil? && User.find_by(user_id).user_type==0%> -->
+  	<%if logged_in?%>
+  		<!-- < %binding.pry%> -->
+  		<li><br><%=current_user.name%></li>
+  		<%if current_user.user_type==0%> <!-- Admin User -->
+  			<li><img src="/images/admin_mode.png" style="float:cener"></li>
+  		<%end%>
+  		<%if current_user.user_type==1%> <!-- Super User, can edit, but cannot add users -->
+  			<li><img class="center-style" src="/images/SuperUser_t_s.png" /></li>
+  		<%end%>
+  		 
+  		<li><%= link_to "Logout", logout_path ,method: :delete, data: { confirm: 'Are you sure you want to log out?' } %></li>
+  	<%else%>
+  		<li><%= link_to "Login", login_path %></li>
+		<%end%>
+    <li><%= link_to "Home", root_path %></li>
+    <li><%= link_to "Help",   '#' %></li>
+  </ul>
+
+
+<ul class="menu">
+
+<%if logged_in?%>
+  <li><a href="#">File</a>
+		<ul>
+      <li><%= link_to_if (logged_in? && current_user.user_type<=1), " Import Data", import_import_path, method: :get %></li>
+      <li><a href="#">Export to Excel (TBD)</li></a>
+		</ul>
+	</li>
+	
+	<li><a href="#">View</a>
+	  <ul>
+      <li><%=link_to "All Locations", controller: 'locations' %></li>
+      <li><%=link_to "All Cables", cables_path %></li>
+<!-- replace with connection search			<li><%= link_to 'All Connections', connections_path %></li>   was commented out -->
+			<li><%= link_to 'All Bakhauls', backhauls_path %></li>
+			<li><%= link_to 'All Feeders', feeders_path %></li>
+			<li><%= link_to 'All Rings', rings_path %></li>
+			<li><%= link_to 'All Customers', customers_path %></li>
+			<li><%= link_to 'All Contracts', contracts_path %></li>
+<!--			<li>< %= link_to "List All Tables", locations_listrack_path %></li>  -->
+		</ul>
+	</li>
+
+	<li><a href="#">New</a>
+		<ul>
+      <li><%=link_to_if (logged_in? && current_user.user_type<=1),  'Location', new_location_path %></li>
+      <li><%=link_to_if (logged_in? && current_user.user_type<=1),  'Cable', new_cable_path %></li>
+      <li><%=link_to_if (logged_in? && current_user.user_type<=1),  "Connection", new_connection_path %></li>
+      <li><%= link_to_if (logged_in? && current_user.user_type<=1),  "Backhaul", new_backhaul_path %></li>
+      <li><%= link_to_if (logged_in? && current_user.user_type<=1),  "Ring", new_ring_path %></li>
+      <li><%= link_to "Customer", new_customer_path %></li>
+      <li><%= link_to "Contract", new_contract_path %></li>
+		</ul>
+	</li>
+	
+	
+	<li><a href="#">Search</a>
+	  <ul>
+      <li><%=link_to "Search Locations", search_search_path(:location_search) %></li>  <!-- locations_search_path -->
+      <li><%=link_to "Search Cables", search_search_path(:cable_search) %></li>
+      <li><%=link_to "2 Points Search", search_search_path(:cable_trace) %></li>
+			<li><%= link_to 'Search Bakhauls', backhauls_path %></li>
+			<li><%= link_to 'Search Feeders', feeders_path %></li>
+			<li><%= link_to "Search Connections", search_search_path(:connections_search) %></li>
+			<li><%= link_to "Search Customers", customers_path %></li>
+			<li><%= link_to 'Search Contracts', contracts_path %></li>
+			<li></li>
+		</ul>
+	</li>
+
+<%if logged_in? && current_user.user_type==0%>	<!-- system level only users-->
+	<li><a href="#">System</a>
+	  <ul>
+      <li><%=link_to "Clean Ports", devports_cleanprts_path%></li>
+			<li></li>
+		</ul>
+	</li>
+<%end%>
+
+<%if logged_in? && current_user.user_type <= 1%>	<!-- system/Admin levels only-->
+	<li><a href="#">Tools</a>
+	  <ul>
+      <li><%=link_to "Merge Data Items", tools_mergedataform_path%></li>
+			<li></li>
+		</ul>
+	</li>
+<%end%>
+
+
+	<%end%>
+	
+
+<!--	
+	<li><a href="#">Uploads</a></li>
+	<li><a href="#">Videos</a></li>
+	<li><a href="#">Documents</a></li>
+-->
+</ul> <!-- end .menu -->
+
+</nav>
+</div>
+
+</header>

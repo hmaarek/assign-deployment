@@ -1,0 +1,34 @@
+<%location= Location.find(params[:location_id])%>
+
+<h1>Listing Racks for <font color="#FF0000"><%= location.name %></h1></font>
+<%if location.net_racks.count>0%>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Size</th>
+      <th>No. of Installed Devices | </th>
+      <th>Location</th>
+      <th></th>
+      <th></th>
+    </tr>
+  
+  <% @net_racks.each do |nr| %>
+    <tr>
+      <td align="center"><%= link_to nr.name,  [nr]%></td>
+      <td align="center"><%= nr.size %></td>
+      <td align="center"><%= nr.devices.count%></td>
+      <td align="center"><%= nr.location.name %></td>
+      <td><%= link_to image_tag("/images/Edit_s2.png"), edit_net_rack_path(nr)%></td>
+      <td><%= link_to image_tag("/images/Delete_s2.png"), [nr], data: { confirm: "Are you sure?" }, :method => :delete %></td>
+    </tr>
+  <% end %>
+  </table>
+  
+  <br />
+  
+
+<%else%>
+  <h3> <font color="#FF0000">--- No Racks installed in this location ---</h3></font>
+<%end%>
+<%= link_to "Back to " + location.name, location_path(location) %>
+<%= link_to 'New Rack', new_location_net_rack_path %> <!-- /locations/:location_id/net_racks/new -->

@@ -1,0 +1,99 @@
+<h1>Merge Data Items</h1>
+<br>
+<hr>
+
+<br>
+Select 2 Data Items to be merged<br>
+The system will:
+<li>1- Search for both item names in the dB</li>
+<li>2- if found the sytem will replace all enteries of <strong>Item B</strong> with <strong>Item A</strong></li>
+<li>3- A message of the number of replacement took place will follow as a result</li>
+
+
+<hr>
+<br>
+
+<%= form_tag tools_mergedataproc_path do%>
+
+<%@item_types= ['Customer', 'Connection', 'Backhaul/Feeder', 'Cable', 'Location'] %>
+<strong>
+<br>1.Select Items Type: <%=collection_select(:ItemType,  :type , @item_types, :to_s, :to_s, include_blank: false) %>
+</strong>
+<br>
+<br>
+<br>
+
+<div class="container">
+  <div class="row">
+
+    <div class="col-sm-6" style="background-color:lightgreen">
+    <h3> <%=label_tag :itemA, "Select Item A (to Keep):"%> </h3><br>
+    <div class="field">
+
+        <div class="col2-sm-4">
+        Type name: <%= text_field_tag(:itemA) %>  
+        <%= label_tag :typeA, "Select Item Type:" %><br />
+      </div>
+    </div>
+
+
+
+  </div>
+
+  <div class="col-sm-6" style="background-color:orange";>
+    <h3> <%=label_tag :itemB, "Select Item B (to replace):"%> </h3><br>
+    <div class="field">
+
+        <div class="col2-sm-4">
+          Type name: <%= text_field_tag(:itemB) %>  
+          <%= label_tag :b_search_type, "Select Item B Type:" %><br />
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<br>
+<br>
+<hr>
+
+<div class="container">
+  <div class="row">
+
+    <div class="col-sm-0";>
+    </div>
+
+    <div class="col-sm-3";>
+<br>
+<hr>
+<%=submit_tag("      Search      ", data: { confirm: 'Are you sure?' }) %>
+    </div>
+
+    <div class="col-sm-1";>
+    </div>  
+  </div>
+</div>
+
+<!--
+ <br> 
+ <br>
+  <a href="#" id="advancedsearch">Advanced Search</a>
+
+
+
+<br>
+<br>
+  <p_fAdvanced>
+    
+
+    ------- To Be Implemented... ------------
+    
+    
+  </p_fAdvanced>
+  
+-->
+
+<% end %>
+
+<hr>
+<hr>

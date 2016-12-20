@@ -1,0 +1,2 @@
+module NetRacksHelper
+end

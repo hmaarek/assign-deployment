@@ -1,0 +1,219 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Location Information for <font color="#FF0000"><%=@location.name%></h1> </font>
+
+
+<!--
+<div class="image" >  style="visibility: hidden"
+
+<h2>< %= @location.name %></h2>
+<img src="/images/CO.jpg" >  <!--style="float:center"- ->
+</div>
+
+<style>
+.image { 
+   position: relative; 
+   width: 100%; /* for IE 6 */
+}
+
+h2 { 
+   position: absolute; 
+   top: 2px; 
+   left: 110px; 
+   width: 100%; 
+}
+</style>
+-->
+<p>
+  <hr>
+  <strong>Name:</strong>
+  <%= @location.name %>
+</p>
+
+<p>
+  <strong>Address:</strong>
+  <%= @location.address %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @location.location_type %>
+</p>
+
+
+    <% rack_count = @location.net_racks.count %>
+
+<!--
+    < %if rack_count==0%>
+      <font size="1" color="red">No Net Racks in location < %=@location.name%></font><br>
+    < %else%>
+      < % if rack_count>1 %>
+          <h4>There are < %= rack_count %> Racks in that location</h4>
+      < % else %>
+          <h4>There is < %= rack_count %> Rack in that location</h4>
+      < % end %>
+      <!-- < %= link_to "Show Rack(s) details", location_net_racks_path(@location) %> |  -- >
+    < % end %>
+-->
+
+  <%locracks = NetRack.where("location_id = " + @location.id.to_s)%>  
+  <%if @location.location_type.casecmp("MDU")==0 || @location.location_type.casecmp("SDU")==0%>
+    <hr>
+    <strong>RFS Status: </strong> <%=@location.rfs_status%><br>
+    <strong>RFS Date: </strong> <%=@location.rfs_date%><br>
+  
+  <!-- show this later when we calculate it correctly...
+    <strong>No of Home Passed: </strong> < %=@location.home_passed%><br>
+    <strong>No of Home Connected: </strong> < %=@location.home_connected%><br>
+  -->
+  
+    <hr>
+    <!-- Display all Ports Data Per installed Termination Device-->
+    
+    <!-- < %rack = NetRack.where("location_id = " + @location.id.to_s).first % >  -->
+    
+    <%locracks.each do |rack|%>
+      <%if !rack.nil?%>
+        <%devs = Device.where("net_rack_id = " + rack.id.to_s) %>
+        
+        <%devs.each do |dev|%>
+          <h3>Ports For Rack: <b><%=dev.device_type%> : <%=dev.name%></b></h3>
+           <table>
+            <tr>
+              <th>#</th>
+              <th>Port ID </th>
+              <th>Fiber In ID  </th>
+              <th>Connection ID</th>
+              <th>Connection Status </th>
+              <th>Customer Name</th>
+              <th>Action</th>
+            </tr>
+          <%ports = Devport.where("device_id = " + dev.id.to_s) %>
+          <% next if ports.nil?%>
+      
+          <%count=0%>
+          <% ports.each do |port| %>
+        
+              <%count += 1%>
+        
+              <%fiberInName = "N/A"%>
+              <%connName = "N/A"%>
+              <%customerName = "--"%>
+              <%connStatus = "--"%>
+              <%fiberIn = Fiberstrand.find_by_id(port.fiber_in_id)%>
+              <% if !fiberIn.nil?%>
+                <%fiberInName = fiberIn.name%>
+                <%connID = fiberIn.connection_id%>
+                <%if !connID.nil? && connID >0%>
+                  <%conn = Connection.find_by_id(connID)%>
+                  <%connName  =conn.name%>
+                  <%connStatus  =conn.status%>
+                  <%color = "BLACK"%>
+                  <%color = "OrangeRed" if connStatus.casecmp("LIVE")==0%>
+                  <%color = "BLUE" if connStatus.casecmp("RESERVED")==0%>
+                  <%customerID  =conn.customer_id%>
+                <%end%>
+              <%end%>
+              
+              <!-- < %fiberOutName = "N/A"%>
+              < %fiberOut = Fiberstrand.find_by_id(port.fiber_out_id)%>
+              < %fiberOutName = fiberOut.name if !fiberOut.nil?%>
+              -->
+
+
+
+            
+        
+            <tr>
+              <td align="left"><%= count%></td>
+              <td align="left"><%= link_to port.name, port %></td>
+              
+              <%if !fiberIn.nil?%>
+                <td align="center"><%=link_to fiberInName,  fiberIn%></td>
+              <%else%>
+                <td align="center"><%=fiberInName %></td>
+              <%end%>
+              
+              <!--
+              < %if !fiberOut.nil?%>
+                <td align="center">< %=link_to fiberOutName,  fiberOut%></td>
+              < %else%>
+                <td align="center">< %=fiberOutName %></td>
+              < %end%>
+              -->
+
+              <%if !conn.nil?%>
+                <td align="center"><%=link_to connName,  conn%></td>
+              <%else%>
+                <td align="center"><%=connName %></td>
+              <%end%>
+              <td align="center" ><font color="<%=color%>"><%=connStatus%></font></td>
+
+
+              <%if !customerID.nil? && customerID>0%>
+                <%customer = Customer.find_by_id(customerID)%>
+                <td align="center"><%=link_to customer.name,  customer%></td>
+              <%else%>
+                <td align="center"><%=customerName %></td>
+              <%end%>
+
+              <td><%= link_to image_tag("/images/Edit_s2.png"), edit_devport_path(port)%>
+              <%= link_to image_tag("/images/Delete_s2.png"), [port], data: { confirm: "Are you sure?" }, :method => :delete %></td>
+               
+            </tr>
+          <% end %>
+          </table>
+      
+        <%end%>
+      <%end%>
+      <hr>
+    <%end%>
+  <hr>
+  
+  <!-- list ll connections attached to ports in this location -->
+  
+  <%else%>
+  
+        <table>
+      <tr>
+        <th># </th>
+        <th>Name</th>
+        <th>Size</th>
+        <th>No. of Installed Devices | </th>
+        <th>Location</th>
+        <th></th>
+        <th></th>
+      </tr>
+
+    <%i=1%>
+    <%locracks.each do |rack|%>
+    
+      <tr>
+        <td align="left"><%=i%></td>
+        <td align="center"><%= link_to rack.name,  [rack]%></td>
+        <td align="center"><%= rack.size %></td>
+        <td align="center"><%= rack.devices.count%></td>
+        <td align="center"><%= rack.location.name %></td>
+        <td><%= link_to image_tag("/images/Edit_s2.png"), edit_net_rack_path(rack)%></td>
+        <td><%= link_to image_tag("/images/Delete_s2.png"), [rack], data: { confirm: "Are you sure?" }, :method => :delete %></td>
+      </tr>
+      <%i+=1%>
+    <% end %>
+  </table>
+  
+  <br />
+
+  
+  <%end%>
+  
+<hr>
+<div id= "location_connectbackhauls_process" class="container">
+  <%=button_to 'Connect Backhauls through Connections', connectbackhauls_path(@location),  method: :get, class:"btn btn-primary"%>
+<hr>
+</div>
+
+
+<%= link_to 'Edit', edit_location_path(@location) %> |
+<%= link_to 'Add New Rack', new_location_net_rack_path(@location) %> |
+<%= link_to 'List Free Ports', list_free_ports_path(@location) %> |
+<%= link_to 'List All Locations', locations_path %> 

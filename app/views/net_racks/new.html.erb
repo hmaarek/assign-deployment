@@ -1,0 +1,14 @@
+<%= render 'navbar' %>
+<h1>Adding New Rack for <font color="#FF0000"><%=@net_rack.location.name%></h1></font>
+
+
+<%@net_rack.rack_type=1%>   <!-- default of net rack is ODF based -->
+
+<%= form_for([@net_rack.location, @net_rack]) do |f| %>
+
+    <%= render 'form', :f => f %>
+
+<%end%>
+
+<!-- /locations/:location_id/comments/ -->
+<%= link_to 'List all racks in '+@net_rack.location.name, location_net_racks_path(@net_rack.location) %>

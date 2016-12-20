@@ -1,0 +1,29 @@
+[12] pry(main)> a1=[]
+=> []
+[13] pry(main)> a1[0]=1
+=> 1
+[14] pry(main)> a1[1]=15
+=> 15
+[15] pry(main)> a
+NameError: undefined local variable or method `a' for main:Object
+Did you mean?  a1
+from (pry):13:in `<main>'
+[16] pry(main)> a1
+=> [1, 15]
+[17] pry(main)> a2=[]                                                                                                 
+=> []
+[18] pry(main)> a2[0]=10                                                                                              
+=> 10
+[19] pry(main)> a2[1]=150
+=> 150
+[20] pry(main)> s2
+NameError: undefined local variable or method `s2' for main:Object
+from (pry):18:in `<main>'
+[21] pry(main)> a2
+=> [10, 150]
+[22] pry(main)> a2d[0]=a1
+=> [1, 15]
+[23] pry(main)> a2d[1]=a2
+=> [10, 150]
+[24] pry(main)> a2d
+=> {0=>[1, 15], 1=>[10, 150]}

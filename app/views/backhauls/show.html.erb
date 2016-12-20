@@ -1,0 +1,278 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Backhaul Information for <font color="#FF0000"><%=@backhaul.name%></h1> </font>
+
+
+<!--
+<div class="image">
+
+<h2>< %= @backhaul.name %></h2>
+<img src="/images/backhaul_repres.png" >  <!--style="float:center"-- >
+</div>
+
+<style>
+.image { 
+   position: relative; 
+   width: 100%; /* for IE 6 */
+}
+
+h2 { 
+   position: absolute; 
+   top: 2px; 
+   left: 50px; 
+   width: 100%; 
+}
+</style>
+-->
+<p>
+  <strong>Name:</strong>
+  <%= @backhaul.name %>
+</p>
+<p>
+<strong>RFS Status:</strong>
+<%=@backhaul.rfs_status%>
+</p>
+<p>
+<strong>Description:</strong>
+<%= @backhaul.descript%>
+
+<hr>
+
+<script src="/scripts/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("p_exp").hide();
+    $("#hideAll").click(function(){
+        $("p_exp").toggle();
+    });
+});
+
+</script>
+<!-- $("button").click(function(){ -->
+
+<button id="hideAll" > Expand All Connections </button>
+
+<p_exp>
+<br>
+
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;border-color:#aabcfe;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#669;background-color:#e8edff;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#039;background-color:#b9c9fe;}
+.tg .tg-baqh{text-align:center;vertical-align:top}
+.tg .tg-sh07{background-color:#cbcefb;text-align:center;vertical-align:top}
+.tg .tg-yw4l{vertical-align:top}
+</style>
+<style type="text/css">
+.tg2  {border-collapse:collapse;border-spacing:0;border-color:#aabcfe;}
+.tg2 td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#669;background-color:#e8edff;}
+.tg2 th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#039;background-color:#b9c9fe;}
+.tg2 {text-align:center;vertical-align:top}
+.tg2 .tg2-sh07{background-color:#cbcefb;text-align:center;vertical-align:top}
+.tg2 .tg2-yw4l{vertical-align:top}
+</style>
+
+<style type="text/css">
+.tg3  {border-collapse:collapse;border-spacing:0;border-color:#e6ccff;}
+.tg3 td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#669;background-color:#e8edff;}
+.tg3 th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#039;background-color:#e6ccff;}
+.tg3 {text-align:center;vertical-align:top}
+.tg3 .tg3-sh07{background-color:#e6ccff;text-align:center;vertical-align:top}
+.tg3 .tg3-yw4l{vertical-align:top}
+</style>
+
+<style type="text/css">
+.tg4  {border-collapse:collapse;border-spacing:0;border-color:#e6ccff;}
+.tg4 td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#669;background-color:#e8edff;}
+.tg4 th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#aabcfe;color:#039;background-color:#98e698;}
+.tg4 {text-align:center;vertical-align:top}
+.tg4 .tg4-sh07{background-color:#e6ccff;text-align:center;vertical-align:top}
+.tg4 .tg4-yw4l{vertical-align:top}
+</style>
+
+
+<%@backhaulID = @backhaul.id%>
+<%if @backhaulID >0 %>
+    <% clist = Connection.list_backhaul_connections(@backhaulID) %>
+    <%if clist.empty?%>
+       Backhual is empty 
+   <%end%>
+<%end%>
+
+<!--Do this towice: once for Live/Reserved connections, and once again for Dark(free) connections -->
+
+<!-- < %binding.pry%> -->
+<% for i in 1..2 %> 
+
+<%cno= 0%>
+<!--build a table for each connection -->
+  <% clist.each do |conn| %>
+  <%cno= cno+1%>
+    <%tableClass = "tg2"%>    
+    <%if i==1%>
+        <%next if conn.status.casecmp("Dark")==0%> <!-- first round, get only Live connections -->
+    <%else%>
+        <%tableClass = "tg4"%>
+        <%next if conn.status.casecmp("Dark")!=0%> <!-- Second round, get only Dark(free) connections -->
+    <%end%>
+  
+
+  
+<table class="<%=tableClass%>">  <!--"tg"-->
+  <tr>
+    <th class="<%=tableClass%>" + "-sh07" colspan="6"><h3>Connection Data for <%=conn.name%>  [ ID:<%=conn.id%>, i=<%=i%> ]
+    <br> <%=link_to "Edit", edit_connection_path(conn) %></h3></th>
+  </tr>
+  <tr>
+    <td class="<%=tableClass%>"+"-yw4l">Customer Name</td>     <!--"tg-yw4l"-->
+    <td class="<%=tableClass%>"+"-yw4l">Connection ID</td>
+    <td class="<%=tableClass%>"+"-yw4l">Connection Status</td>
+    <td class="<%=tableClass%>"+"-yw4l">Connection Utilization</td>
+    <td class="<%=tableClass%>"+"-yw4l">Request Category</td>
+    <td class="<%=tableClass%>"+"-yw4l">OMS Request ID</td>
+  </tr>
+  <tr>
+      <%cust = Customer.find_by_id(conn.customer_id)%>
+      <%if cust.nil?%>
+          <td class=<%tableClass%>+"-yw4l">N/A</td>
+      <%else%>
+          <td class=<%tableClass%>+"-yw4l"><%= link_to cust.name, cust %></td>
+      <%end%>
+    <%if i==1%>
+        <td class=<%tableClass%>+"-yw4l"><%= link_to conn.name, conn %> </td>
+    <%else%>
+        <td class=<%tableClass%>+"-yw4l"><%=conn.name%></td>
+    <%end%>
+    <td class=<%tableClass%>+"-yw4l"><%=conn.status%></td>
+    <td class=<%tableClass%>+"-yw4l"><%=conn.description%></td>
+    <td class=<%tableClass%>+"-yw4l"><%=conn.request_category%></td>
+    <td class=<%tableClass%>+"-yw4l"><a href="http://10.50.100.10:8080/WorkOrder.do?woMode=viewWO&woID=<%=conn.request_id%>" target="_blank"><%=conn.request_id%></a></td>      <!--link to Zoho -->
+
+</tr>
+</table>
+
+<%myId = "hideP" + cno.to_s%>
+
+<button id="<%=myId%>" >--- Expand ---</button>
+
+<%@lastFiber=0%>
+    <%fbrlist = Fiberstrand.list_connection_fibers(conn.id)%>
+    <!-- < %binding.pry%> -->
+    <%pnt=0%>
+    <% fbrlist.each do |fbr| %>
+      <%@lastFiber = fbr%>
+        <%next if fbr.nil?%>
+        <%pnt = pnt+1%>
+        <%cbl = Cable.find_by_id(fbr.cable_id)%>
+        <%dev = Device.find_by_id(Devport.find_by_id(fbr.porta).device_id)%>
+        <%location = Location.find_by_id(cbl.location_a_id)%>
+        <%net_rack = NetRack.find_by_id(dev.net_rack_id)%>
+        <%porta = (Devport.find_by_id(fbr.porta))%>
+        <%count = fbrlist.count%>
+
+<!--display only first and last points -->        
+<%if pnt==2%>
+<script>
+$(document).ready(function(){
+    $("sec<%=cno%>").hide();
+    $("#hideP<%=cno%>").click(function(){
+        $("sec<%=cno%>").toggle();
+    });
+});
+</script>
+
+<sec<%=cno%>>
+
+<%end%>
+        <table class="<%=tableClass%>">
+            <tr>
+                <%if pnt==1%>
+                    <th class="<%=tableClass%>" colspan="10" ><b>Connection Start Point</b><br>Point <%=pnt%></th>
+                <%else%>
+                    <th class="<%=tableClass%>" colspan="10">Point <%=pnt%></th>
+                <%end%>
+            </tr>
+        <tr>
+            <td class="<%=tableClass%>"+"-yw4l">Location Name</td>  <!-- "tg2-yw4l" -->
+            <td class="<%=tableClass%>"+"-yw4l">Location Type</td>
+            <td class="<%=tableClass%>"+"-yw4l">Location Address</td>
+            <td class="<%=tableClass%>"+"-yw4l">Rack ID</td>
+            <td class="<%=tableClass%>"+"-yw4l">Termination Device ID</td>
+            <td class="<%=tableClass%>"+"-yw4l">Termination Device Type</td>
+            <td class="<%=tableClass%>"+"-yw4l">Port ID</td>
+            <td class="<%=tableClass%>"+"-yw4l">Cable Name</td>
+            <td class="<%=tableClass%>"+"-yw4l">Cable Size</td>
+            <td class="<%=tableClass%>"+"-yw4l">Fiberstrand ID</td>
+        </tr>
+            <td class="<%=tableClass%>"+"-yw4l"><%= link_to location.name, location %></td>
+            <td class="<%=tableClass%>"+"-yw4l"><%=location.location_type%></td>
+            <td class="<%=tableClass%>"+"-yw4l"><%=location.address%></td>
+            <td class="<%=tableClass%>"+"-yw4l"><%=link_to net_rack.name, net_rack%></td>
+            <td class="<%=tableClass%>"+"-yw4l"><%=link_to dev.name, dev%></td>
+            <td class="<%=tableClass%>"+"-yw4l"><%=dev.device_type%></td>
+            <td class="<%=tableClass%>"+"-yw4l"><%=link_to porta.name, porta%></td>
+            <td class="<%=tableClass%>"+"-yw4l"><%=link_to cbl.name, cbl%></td>
+            <td class="<%=tableClass%>"+"-yw4l"><%=cbl.size%></td>
+            <td class="<%=tableClass%>"+"-yw4l"><%=link_to fbr.name, fbr%></td>
+          </tr>
+  </table>
+<%end%>
+</sec<%=cno%>>
+
+
+    <!-- here we list data for the end point , point b on fibers-->
+        <table class="tg3">
+            <tr>
+                <th class="tg3" colspan="10"><b>Connection End Point</b><br>Point <%=pnt%></th>
+            </tr>
+        
+        <%cblb = Cable.find_by_id(@lastFiber.cable_id)%>
+        <%devb = Device.find_by_id(Devport.find_by_id(@lastFiber.portb).device_id)%>
+        <%locb = Location.find_by_id(cblb.location_b_id)%>
+        <%netrb = NetRack.find_by_id(devb.net_rack_id)%>
+        <%portbb = Devport.find_by_id(@lastFiber.portb)%>
+        <tr>
+            <td class="tg3-yw4l">Location Name</td>
+            <td class="tg3-yw4l">Location Type</td>
+            <td class="tg3-yw4l">Location Address</td>
+            <td class="tg3-yw4l">Rack ID</td>
+            <td class="tg3-yw4l">Termination Device ID</td>
+            <td class="tg3-yw4l">Termination Device Type</td>
+            <td class="tg3-yw4l">Port ID</td>
+            <td class="tg3-yw4l">Cable Name</td>
+            <td class="tg3-yw4l">Cable Size</td>
+            <td class="tg3-yw4l">Fiberstrand ID</td>
+        </tr>
+        </tr>
+            <td class="tg3-yw4l"><%=link_to locb.name, locb%></td>
+            <td class="tg3-yw4l"><%=locb.location_type%></td>
+            <td class="tg3-yw4l"><%=locb.address%></td>
+            <td class="tg3-yw4l"><%=link_to netrb.name, netrb%></td>
+            <td class="tg3-yw4l"><%=link_to devb.name, devb%></td>
+            <td class="tg3-yw4l"><%=devb.device_type%></td>
+            <td class="tg3-yw4l"><%=link_to portbb.name, portbb%></td>
+            <td class="tg3-yw4l">--</td>
+            <td class="tg3-yw4l">--</td>
+            <td class="tg3-yw4l">--</td>
+          </tr>
+
+        </table>
+<hr>
+<%end%>
+<%end%>
+
+<!-- ------------------------Cables with no (Free) connections assigned---------------------- -->
+
+
+
+
+
+
+<hr>
+<br>
+<br>
+<%= link_to_if (logged_in? && current_user.user_type<=1),  'Edit', edit_backhaul_path(@backhaul) %> |
+<!-- < %= link_to 'Add New Rack', new_backhaul_net_rack_path(@backhaul) % > |  -->
+<%= link_to 'List All Backhauls', backhauls_path %> |
+<%= link_to_if (logged_in? && current_user.user_type<=1),  'Add a Cable to this Backhaul (TBD)', "../TBD.html" %> |
+<%= link_to 'List all cables in this backhaul (TBD)',"../TBD.html" %>

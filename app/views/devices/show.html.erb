@@ -1,0 +1,89 @@
+<p id="notice"><%= notice %></p>
+<%= render 'navbar' %>
+<h1>Device Information for <font color="#FF0000"><%=@device.name%></h1></font>
+<div class="image">
+
+<h2><%= @device.net_rack.location.name %></h2> <h31><%= @device.net_rack.name %></h31> <h311><%= @device.name %></h311>
+<%=link_to image_tag("/images/CO_b.jpg"), location_path(@device.net_rack.location) %> <%=link_to image_tag("/images/Rack_s.jpg"), net_rack_path(@device.net_rack) %> <img src="/images/ODF_s.jpg" >
+<!-- <img src="/images/Rack_s.jpg" ></a> -->
+</div>
+
+<style>
+.image { 
+   position: relative; 
+   width: 100%; /* for IE 6 */
+}
+
+h2 { 
+   position: absolute; 
+   top: 2px; 
+   left: 110px; 
+   width: 100%; 
+}
+</style>
+
+
+<style>
+.image { 
+   position: relative; 
+   width: 100%; /* for IE 6 */
+}
+
+h2 { 
+   position: absolute; 
+   top: 163px; 
+   left: 20px; 
+   width: 100%; 
+}
+
+
+h31 { 
+  font: bold 18px/25px Helvetica, Sans-Serif;
+   position: absolute; 
+   top: 163px; 
+   left: 500px; 
+   width: 100%; 
+}
+h311 { 
+  font: bold 18px/25px Helvetica, Sans-Serif;
+   position: absolute; 
+   top: 183px; 
+   left: 600px; 
+   width: 100%; 
+}
+
+</style>
+
+
+
+<p>
+  <strong>Name:</strong>
+  <%= @device.name %>
+</p>
+
+<p>
+  <strong>Device Type:</strong>
+  <%= @device.device_type %>
+</p>
+
+<p>
+  <strong>Rack:</strong>
+  <%= @device.net_rack.name %>
+</p>
+
+
+    <% ports_count = @device.devports.count %>
+    <% if @device.devports.present? %>
+        <% if ports_count>1 %>
+          <h4>There are <%= ports_count %> ports in that Device</h4>
+        <% else %>
+          <h4>There is <%= ports_count %> port in that Device</h4>
+        <% end %>
+        <%= link_to "Show Port(s) details", device_devports_path(@device) %> |
+  <% else %>
+    <font size="1" color="red">No Ports in Device <%=@device.name%></font><br>
+  <% end %>
+
+<%= link_to_if (logged_in? && current_user.user_type<=1),  'Edit', edit_device_path(@device) %> |
+<%= link_to_if (logged_in? && current_user.user_type<=1),  'Add Port', new_device_devport_path(@device) %> |
+<%= link_to 'List All Devices in ' + @device.net_rack.name , net_rack_devices_path(@device.net_rack) %>

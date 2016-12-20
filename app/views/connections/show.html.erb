@@ -1,0 +1,243 @@
+<!--
+This file is used to list connections, either from other controllers, or from
+main Connection controller. It uses a list of connections to display (@connections)
+-->
+
+<p id="notice"><%= notice %></p>
+
+<h1>Connection Information for <font color="#FF0000"><%=@connection.name%></h1> </font>
+<!--
+<div class="image">
+
+<h2>< %= @connection.name %></h2>
+<img src="/images/connection.jpg" >  <!--style="float:center"-- >
+</div>
+
+<style>
+.image { 
+   position: relative; 
+   width: 100%; /* for IE 6 */
+}
+
+h2 { 
+   position: absolute; 
+   top: 2px; 
+   left: 50px; 
+   width: 100%; 
+}
+</style>
+
+<p>
+  <strong>Name:</strong>
+  < %= @connection.name %>
+</p>
+-->
+
+<table class="table table-condensed">
+    <tr>
+    <th></th>
+    <th scope="col"></th>
+    </tr>
+    
+    <tr class="info">
+    <th scope="row">Connection Name:</th>
+    <td><strong><%= @connection.name %></strong></td>
+    </tr>
+    
+    <tr>
+    <th scope="row">Connection Status</th>
+    <%color="Black"%>
+    <%color="OrangeRed" if @connection.status.casecmp("Live")==0%>
+    <%color="Blue" if @connection.status.casecmp("Reserved")==0%>
+    <td></font color = <%=color%>> <%=@connection.status%> </font> </td>
+    </tr>
+
+    <%fport = @connection.get_first_port%>
+    
+    <!-- < %binding.pry%> -->
+    <%lport = @connection.get_last_port%>
+    <%loca = Location.find_by_id((Devport.find_by_id(fport)).location_id)%>
+    <%locb = Location.find_by_id((Devport.find_by_id(lport)).location_id)%>
+
+    <tr>
+    <th scope="row">From </th>
+    <td><%=link_to loca.name,  loca%></td>
+    </tr>
+    
+    <tr>
+    <th scope="row">To </th>
+    <td><%=link_to locb.name,  locb%></td>
+    </tr>
+
+    <tr>
+    <th scope="row">Description</th>
+    <td><%=@connection.description%></td>
+    </tr>
+
+    <tr>
+    <th scope="row">Request Category</th>
+    <td><%=@connection.request_category %></td>
+    </tr>
+
+    <tr>
+    <th scope="row">Terminating Fiber Type</th>
+    <td><%=@connection.fiber_type%></td>
+    </tr>
+
+    <tr>
+    <th scope="row">OMS Request ID</th>
+  <td align="center"><a href="http://10.50.100.10:8080/WorkOrder.do?woMode=viewWO&woID=<%=@connection.request_id%>" target="_blank"><%=@connection.request_id%></td>
+    </tr>
+
+</table>
+
+<hr>
+
+<hr>
+<%details=Array.new(10)%>
+
+    <% firstPort = @connection.get_first_port %>
+    <%if firstPort>0 %>
+        <%itrt = true%>
+        <%cntr=0%>
+        <%maxhubs = 100%>
+        <%prt = Devport.find_by_id(firstPort)%>
+        <%location = Location.find_by_id(prt.location_id)%>
+        <%locname= location.name%>
+        <%=link_to locname, location_path(location),:style=> 'color:#FF0000;'%>
+
+        <%while itrt%>
+            <% break if prt.nil?%>
+            <%location = Location.find_by_id(prt.location_id)%>
+            <%locname = location.name%>
+            <%rackname = NetRack.find_by_id(Device.find_by_id(prt.device_id).net_rack_id).name%>
+            <%devname = Device.find_by_id(prt.device_id).name%>
+            <%hvr_msg = "location/rack/dev=" + locname + "/" + rackname + "/" + devname%>
+        
+             ▓ <span title=<%=hvr_msg%>><%=link_to prt.name, devport_path(prt)%></span> ▓
+            <%details[cntr]  = "<font color='#FF0000'><b> " + locname + "</font></b>" + "<br>"%>
+            <%details[cntr]  += "Port = "+ prt.name + "<br>"%>
+            <%details[cntr]  += "Device Name = " + devname + "<br>"%>
+            <%details[cntr]  += "Rack Name = " + rackname + "<br>"%>
+             
+        <!-- break if fid-out is zero...termination point -->
+            <%fid = prt.fiber_out_id%>
+            <%break if fid==0%>    
+            
+            <%fiber = Fiberstrand.find_by_id(fid)%>
+            <%break if fiber.nil?%>
+            <%cbl=Cable.find_by_id(fiber.cable_id)%>
+            <%cablename = cbl.name%>
+            <%hvr_msg = "Cable=" + cablename%>
+            <------------ <span title=<%=hvr_msg%>><%=link_to fiber.name, fiberstrand_path(fiber)%></span> ------------>
+
+            <%details[cntr+1]  = "Cable Name =" + cbl.name + "<br>"%>
+            <%details[cntr+1]  += "Fiber Name =" + fiber.name + "<br>"%>
+            <%bkh = Backhaul.find_by_id(cbl.backhaul_id)%>
+            <%if !bkh.nil?%>
+                <%details[cntr+1]  += "Backhaul/Feeder Name =" + bkh.name + "<br>"%>
+            <%end%>
+
+
+
+
+            <!-- get the next port, from portb of the current cable -->
+            <%prt = Devport.find_by_id(fiber.portb)%>
+
+            <!-- upto 100 hubs only...after that something went wrong for sure -->
+            <%cntr += 2%>
+            <%break if cntr>maxhubs%>
+            
+        <%end%>
+
+        <%=link_to locname, location_path(location),:style=> 'color:#FF0000;'%>
+    <%else%>
+        <%flist = Fiberstrand.where("connection_id = " + @connection.id.to_s)%>
+        <%if flist.count==0%>
+            No Fibers attached to this connection....
+        <%else%>
+            <br><font color="#FF0000">ERROR: could not extract connection path details</font>
+            <br>Fibers in this connection are:
+            <%i=0%>
+            <%flist.each do |fiber|%>
+                <%i = i + 1 %>
+                <br><%=i%>. <%=link_to fiber.name, fiber%>
+            <%end%>
+        <%end%>
+    <%end%>
+    <hr>    
+<%if !cntr.nil?%>
+<button id="showFibers" > List All Fiber Details </button>
+<br>
+<script src="/scripts/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("p_fDetails").hide();
+    $("#showFibers").click(function(){
+        $("p_fDetails").toggle();
+    });
+});
+</script>
+
+<p_fDetails>
+
+    <h3>Information for Fibers in this connection are:</h3>
+<!--    < %=details.html_safe%> -->
+    <% firstPort = @connection.get_first_port %>
+    <!--build a table with cnt columnsd -->
+
+<table>
+
+<style>
+table, td, th {
+    border: 1px solid #e0e0eb;
+}
+
+table {
+    border-collapse: collapse;
+    width: 80%;
+}
+
+th {
+    text-align: center;
+}
+
+</style>
+
+<style>
+
+h12 {
+    font-size: 85%;
+}
+
+</style>
+
+<tr>
+
+    <%for i in 0..(cntr/2)%>
+        <th>Location <%=i+1%></th>
+        <%if i<(cntr/2)%>
+            <th>Link <%=i+1%></th>
+        <%end%>
+    <%end%>
+</tr>
+    <%for i in (0..cntr).step(2)%>
+  <!--  < %binding.pry%> -->
+        <td nowrap align = "center"><%=details[i].html_safe%></td>
+        <%if !details[i+1].nil?%>
+            <td nowrap><h12><%=details[i+1].html_safe%></h12></td>
+        <%end%>
+    <%end%>
+<%end%>
+</table>
+</p_fDetails>
+
+<!--
+Need to show all details...link the template import excel sheet
+-->
+<hr>
+<%= link_to_if (logged_in? && current_user.user_type<=1), 'Edit', edit_connection_path(@connection) %> |
+<!-- < %= link_to 'Add New Rack', new_connection_net_rack_path(@connection) % > |  -->
+<%= link_to 'List All Connections', connections_path %> |
+<%= link_to_if (logged_in? && current_user.user_type<=1),  'Add a Fiber to this Connection', "../TBD.html" %> |
+<%= link_to 'List all fibers included in this connection', "../TBD.html" %>

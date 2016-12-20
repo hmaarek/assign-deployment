@@ -1,0 +1,43 @@
+<p id="notice"><%= notice %></p>
+<h1>Listing All Customers</h1>
+
+<table class="tableIndex">
+  <thead>
+    <tr>
+      <th>Image/Logo</th>
+      <th>Customer Name</th>
+      <th>Contact Name</th>
+      <th>Contact Title</th>
+      <th>Contact Phone</th>
+      <th>Notes</th>
+      <th colspan=2>Action</th>
+    </tr>
+  </thead>
+
+
+<!--
+Need to add code to show more details of Customer:
+  - No. of customers belonging to this customer
+  - percentage of customers
+  ....
+-->
+  <tbody>
+    <% @customers.each do |customer| %>
+      <tr>
+        <td align="center"><%=link_to image_tag(customer.avatar.url(:thumb)) , customer%></td>
+        <td align="center"><%= link_to customer.name, customer %></td>
+        <td align="center"><%=customer.contact_name%></td>
+        <td align="center"><%=customer.contact_title%></td>
+        <td align="center"><%=customer.contact_phone%></td>
+        <td align="center"><%=customer.notes%></td>
+
+        <td><%= link_to image_tag("/images/Edit_s2.png"), edit_customer_path(customer) %></td>
+        <td><%= link_to image_tag("/images/Delete_s2.png"), customer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'Add New Customer', new_customer_path %>

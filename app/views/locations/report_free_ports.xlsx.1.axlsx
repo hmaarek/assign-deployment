@@ -1,0 +1,17 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "PortMap") do |sheet|
+    wb.styles do |s|
+        blue_cell = s.add_style :bg_color => "00B0F0", :fg_color => "FF", :sz => 14, :alignment => { :horizontal=> :center }
+        green_cell =  s.add_style  :bg_color => "92D050", :fg_color => "FF", :sz => 20, :alignment => { :horizontal=> :center }
+        sheet.add_row ["Port Name","Device Name","Rack Name", "Location Name"], :style => [blue_cell,blue_cell,blue_cell,blue_cell]
+    end
+
+    @freePorts.each do |prtID|
+        prt = Devport.find(prtID)
+        dvc = Device.find(prt.device_id)
+        rack = NetRack.find(dvc.net_rack_id)
+        loc = Location.find(rack.location_id)
+        sheet.add_row [prt.name, dvc.name, rack.name, loc.name]
+    end
+
+ end

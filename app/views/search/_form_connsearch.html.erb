@@ -1,0 +1,32 @@
+<%= form_tag search_connectionsearch_path do%>
+  <%= label_tag(:q, "Search for:") %>
+  <%= text_field_tag(:q) %>
+  
+  
+  <%= submit_tag("Search") %>
+ <br> 
+ <br>
+  <a href="#" id="advancedsearch">Advanced Search</a>
+
+<br>
+<br>
+  <p_fAdvanced>
+    
+
+    ------- To Be Implemented... ------------
+    
+    
+  </p_fAdvanced>
+  
+  
+<% end %>
+
+<hr>
+<script>
+$(document).ready(function(){
+    $("p_fAdvanced").hide();
+    $("#advancedsearch").click(function(){
+        $("p_fAdvanced").toggle();
+    });
+});
+</script>

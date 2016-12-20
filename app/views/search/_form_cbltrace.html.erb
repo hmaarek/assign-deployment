@@ -1,0 +1,162 @@
+
+
+<h3><font color="OrangeRed">Work Under Progress...!!</font></h3>
+
+<%= form_tag search_cabletrace_path do%>
+
+<div class="container">
+  <div class="row">
+
+    <div class="col-sm-6" style="background-color:lightyellow">
+    <h3> <%=label_tag :devA, "Select Point A:"%> </h3><br>
+
+    <div class="field">
+
+        <div class="col2-sm-4">
+          Type name: <%= text_field_tag(:qa) %>  <%= check_box_tag(:exact_match_a) %>
+          <%= label_tag(:exact_match_a, "Exact Match") %><br>
+
+          <%= label_tag :a_search_type, "Search Type:" %><br />
+          
+          <%= check_box_tag(:dev_search_a) %>
+          <%= label_tag(:dev_search_a, "Search Devices") %><br>
+          <%= check_box_tag(:loc_search_a) %>
+          <%= label_tag(:loc_search_a, "Search Locations") %><br>
+
+      </div>
+    </div>
+
+
+
+  </div>
+
+  <div class="col-sm-6" style="background-color:lightblue";>
+    <h3> <%=label_tag :devA, "Select Point B:"%> </h3><br>
+    <div class="field">
+
+        <div class="col2-sm-4">
+          Type name: <%= text_field_tag(:qb) %> <%= check_box_tag(:exact_match_b) %>
+          <%= label_tag(:exact_match_b, "Exact Match") %><br>
+          
+          <%= label_tag :b_search_type, "Search Type:" %><br />
+
+          <%= check_box_tag(:dev_search_b) %>
+          <%= label_tag(:dev_search_b, "Search Devices") %><br>
+          <%= check_box_tag(:loc_search_b) %>
+          <%= label_tag(:loc_search_b, "Search Locations") %><br>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+<br>
+<br>
+<hr>
+
+<div class="container">
+  <div class="row">
+
+    <div class="col-sm-0";>
+    </div>
+
+    <div class="col-sm-3";>
+<br>
+<hr>
+<%=submit_tag("      Search      ") %>
+    </div>
+
+    <div class="col-sm-1";>
+    </div>  
+  </div>
+</div>
+
+<!--
+ <br> 
+ <br>
+  <a href="#" id="advancedsearch">Advanced Search</a>
+
+
+
+<br>
+<br>
+  <p_fAdvanced>
+    
+
+    ------- To Be Implemented... ------------
+    
+    
+  </p_fAdvanced>
+  
+-->
+
+<% end %>
+
+<hr>
+<!--
+<script>
+$(document).ready(function(){
+    $("p_fAdvanced").hide();
+    $("#advancedsearch").click(function(){
+        $("p_fAdvanced").toggle();
+    });
+});
+</script>
+-->
+
+<script>
+
+//Point A:
+  $('input[type=radio][name="a_search_type"]').change(function () {
+  // first: hide all the divs
+  $('#dev_a_select').css("display","none");
+  $('#loc_a_select').css("display","none");
+
+  // then get the div ID to show (i stored it in the "value" of the radio button
+  var selectedButton = $(this).val();
+  // now use jQuery selector and change the display setting of that field
+  //$("#" + fieldToShow).css("display","block");
+  
+  if (selectedButton == 'loc')
+  {
+    $('#loc_a_select').css("display","block");
+    $('#dev_a_select').css("display","none");
+    document.getElementById('device_devA').selectedIndex=0;
+  }
+  else
+  {
+    $('#loc_a_select').css("display","none");
+    document.getElementById('location_locA').selectedIndex =0;
+    
+    $('#dev_a_select').css("display","block");
+  }
+});
+
+//Point B:
+ $('input[type=radio][name="b_search_type"]').change(function () {
+  // first: hide all the divs
+  $('#dev_b_select').css("display","none");
+  $('#loc_b_select').css("display","none");
+
+  // then get the div ID to show (i stored it in the "value" of the radio button
+  var selectedButton = $(this).val();
+  // now use jQuery selector and change the display setting of that field
+  //$("#" + fieldToShow).css("display","block");
+  
+  if (selectedButton == 'loc')
+  {
+    $('#loc_b_select').css("display","block");
+    $('#dev_b_select').css("display","none");
+    document.getElementById('device_devB').selectedIndex=0;
+  }
+  else
+  {
+    $('#loc_b_select').css("display","none");
+    document.getElementById('location_locB').selectedIndex =0;
+    
+    $('#dev_b_select').css("display","block");
+  }
+});
+  
+</script>

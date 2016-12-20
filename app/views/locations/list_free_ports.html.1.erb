@@ -1,0 +1,62 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing free Ports</h1> </font>
+
+<!-- < %=@freePorts%> -->
+<br>
+<!-- See sheets examples:  https://github.com/randym/axlsx/blob/master/examples/example.rb   -->
+<!-- gem Documentation: https://github.com/straydogstudio/axlsx_rails  -->
+<%= link_to 'Download as .xlsx',report_free_ports_path(loc: @location, format: :xlsx)%>       <!-- locations_path(format: :xlsx) %> -->
+<br>
+<hr>
+<%= form_tag locations_batchports_path do%>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4" style="background-color:lightyellow">
+      <h3>List of Free OUT Ports: </h3><br>
+      <div class="field">
+        <%cntr=0%>
+        <%@freePorts.each do |prtID|%>
+          <% prt = Devport.find(prtID)%>
+          <% if prt.fiber_in_id > 0%>  <!--this was fiber_out_id -->
+            <%dev = Device.find(prt.device_id)%>
+            <br>
+             <%=(NetRack.find(dev.net_rack_id)).name%> / <%=dev.name%> .......... (<font color ="OrangeRed"><%=prt.id%></font>) <b>X-[<%=link_to prt.name , prt%>]-O</b> 
+          <%end%>
+        <%end%>
+      </div>
+    </div>
+    
+    <div class="col-sm-6" style="background-color:lightblue">
+      <h3>List of Free IN Ports: </h3><br>
+      <div class="field">
+        <%cntr=0%>
+        <%@freePorts.each do |prtID|%>
+          <% prt = Devport.find(prtID)%>
+          <% if prt.fiber_out_id > 0%>   <!--this was fiber_in_id -->
+            <br> 
+            <%dev = Device.find(prt.device_id)%>
+            <%= text_field_tag("id_"+prtID.to_s,'', size: 3) %> : <b>O-[<%=link_to prt.name , prt%>]-X </b> <!--(<font color ="OrangeRed">< %=prt.id%></font>)-->.......... <%=(NetRack.find(dev.net_rack_id)).name%> / <%=dev.name%>
+             <br>
+
+            <%cntr+=1%>
+          <%end%>
+        <%end%>
+      </div>
+    </div>
+  </div>    
+
+
+</div>              
+
+
+<div id= "location_batchports_process" class="container">
+  <%=button_to 'Patch Connect', locations_batchports_path,  method: :post, class:"btn btn-info btn-block"%>
+<hr>
+</div>
+<%end%>
+<hr>
+
+
+<%= link_to 'List All Locations', locations_path %> 

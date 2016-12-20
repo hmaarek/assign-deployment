@@ -1,0 +1,58 @@
+<!-- devport form -->
+<!-- http://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-form_for -->
+<!-- < %binding.pry%> -->
+<!-- < %= form_for([@devport.device, @devport]) do |f| %> -->
+  <% if @devport.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@devport.errors.count, "error") %> prohibited this Port from being saved:</h2>
+
+      <ul>
+      <% @devport.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  
+  <%if !@device.nil?%>
+    <div class="field">
+
+      <%= f.number_field :location_id, :value=>NetRack.find_by_id(@device.net_rack_id).location_id, hidden:true %>  <!--, disabled:true-->
+    </div>
+  <%else%>
+    <div class="field">
+      <!-- < %= f.label :LocationID %><br /> -->
+      <%= f.number_field :location_id, :value=>@devport.location_id, hidden:true%>
+    </div>
+  
+  <%end%>
+
+<br>
+<strong>Connected Fibers to this Port</strong> (Zero = not yet connected)<br>
+Fiber in  ID : <%=@devport.fiber_in_id%> (<%=Fiberstrand.find_by_id(@devport.fiber_in_id).name if @devport.fiber_in_id>0  %>)<br>
+Fiber out ID: <%=@devport.fiber_out_id%> (<%=Fiberstrand.find_by_id(@devport.fiber_out_id).name if @devport.fiber_out_id>0%>)<br>
+
+  <div class="field">
+<!--   &emsp;  < %=f.label :fiber_in_id%> <br> -->
+  &emsp;  <%=f.number_field :fiber_in_id, :value=>@devport.fiber_in_id, hidden:true%>
+  </div>
+
+  
+  <div class="field">
+<!--   &emsp;  < %=f.label :fiber_out_id%><br> -->
+  &emsp;  <%=f.number_field :fiber_out_id, :value=>@devport.fiber_out_id, hidden:true%>
+  </div>
+  
+  <br>
+  
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+  
+<!-- < % end %> -->

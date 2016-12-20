@@ -1,0 +1,65 @@
+<h1>Connections List between segments Search Results </h1>
+
+
+<%if @count >0%>
+    <hr>
+    Search Found <%=pluralize(@count, "result")%>
+    <br>
+    <!-- < %binding.pry%>  -->
+    <h3>Search restuls between: <font color="RED"><%=Device.find_by_id(@srcDev).name%></font> on location: <%=Location.find_by_id(@srcLocation).name%>  --- to  <font color="RED"><%=Device.find_by_id(@dstDev).name%></font> on location: <%=Location.find_by_id(@dstLocation).name%></h3>
+    
+    <br>
+    <table>
+      <thead>
+        <th>#</th>
+        <th>Port no.</th>
+        <th>Connection ID</th>
+        <th>Connection Status</th>
+        <th>Customer Name</th>
+        </tr>
+        </thead>
+        
+    <tbody>
+    <%indx = 0%>
+    <%@portList.each do |prt|%>
+    
+        <%connID = Connection.find_by_id(@connList[indx]%>
+        <%next if connID ==0%>
+        <%conn = Connection.find_by_id(connID)%>
+    
+        <tr>
+            <td align = "left"><%=indx+1%></td>
+            <td align = "left"> <%=Devport.find_by_id(prt).name%></td>
+            <td align = "left"> <%=link_to conn.name, conn%></td>
+            <%cstatus = Connection.find_by_id(@connList[indx]).status%>
+            <%clr = "BLACK"%>
+            <%if cstatus.casecmp("Live")==0%>
+                <%clr = "RED"%>
+            <%elsif cstatus.casecmp("Reserved")==0%>
+                <%clr = "BLUE"%>
+            <%end%>
+            <td align = "left"> <font color =<%=clr%>><%=cstatus%></font></td>
+            <%custID = Customer.find_by_id(@customerList[indx])%>
+            <%if !custID.nil?%>
+                <td align = "left"> <%=custID.name%></td>
+            <%else%>
+                <td align = "left"> --- </td>
+            <%end%>
+        </tr>
+    <%indx +=1%>
+    <%end%>
+    </tbody>
+    </table>
+    <br>
+<%else%>
+    <br>
+    <h3><font color = "RED"><%=@errorMessage%></font></h3> 
+    <h3><font color = "RED">No Results Found !</font></h3>
+    <%if @errorMessage.nil? || @errorMessage.empty?%>
+        <br><b>loc-A: </b> <%=Device.find_by_id(@srcDev).name%>
+        <br><b>loc-B: </b> <%=Device.find_by_id(@dstDev).name%>
+    <%end%>
+    <br>
+<%end%>
+<hr>
+<%= link_to 'List All Locations', locations_path %>

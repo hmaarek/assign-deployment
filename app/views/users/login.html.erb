@@ -1,0 +1,22 @@
+<h1>User Login</h1>
+
+
+<%= form_tag users_processlogin_path, multipart: true do %>
+    
+    
+    
+    <div class="field">
+    <%= label :email %><br>
+    <%= text_field :email %>
+    </div>
+
+
+    <div class="field">
+    <%= label :password %><br>
+    <%= text_field :password %>
+    </div>
+
+
+    
+    <%= submit_tag "Login" %>
+<%end%>

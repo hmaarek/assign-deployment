@@ -1,0 +1,13 @@
+<%= render 'navbar' %>
+<h1>Editing Net Rack</h1>
+
+<!-- < %= render 'formedt' %> -->
+
+<%= form_for(@net_rack) do |f| %>
+
+    <%= render 'form', :f => f %>
+
+<%end%>
+
+<%= link_to 'Show', [@net_rack] %> |
+<%= link_to 'Back', location_net_racks_path(@net_rack.location) %>

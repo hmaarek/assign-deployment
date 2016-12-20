@@ -1,0 +1,100 @@
+<%= render 'navbar' %>
+<p id="notice"><%= notice %></p>
+
+<h1>Fiber Strand Information for Fiber name:<font color="#FF0000"><%=@fiberstrand.name%></h1></font>
+
+
+
+<div class="image">
+
+<h2><%= @fiberstrand.cable.name %></h2> <h31><%= @fiberstrand.name %></h31>
+<%=link_to image_tag("/images/cable.jpg"), cable_path(@fiberstrand.cable)%> <img src="/images/Fiberstrand.jpg" > <!--style="float:center"-->
+</div>
+
+<style>
+.image { 
+   position: relative; 
+   width: 100%; /* for IE 6 */
+}
+
+h2 { 
+   position: absolute; 
+   top: 2px; 
+   left: 110px; 
+   width: 100%; 
+}
+</style>
+
+
+<style>
+.image { 
+   position: relative; 
+   width: 100%; /* for IE 6 */
+}
+
+h2 { 
+    font: bold 18px/25px Helvetica, Sans-Serif;
+   position: absolute; 
+   top: 163px; 
+   left: 20px; 
+   width: 100%; 
+}
+
+
+h31 { 
+  font: bold 18px/25px Helvetica, Sans-Serif;
+   position: absolute; 
+   top: 163px; 
+   left: 400px; 
+   width: 100%; 
+}
+</style>
+<br>
+<br>
+<p>
+<hr>
+  <strong>Fiber Name:</strong>
+  <%= @fiberstrand.name %>
+</p>
+<%
+devpta = Devport.find(@fiberstrand.porta)
+devptb = Devport.find(@fiberstrand.portb)
+deva = Device.find(Devport.find(@fiberstrand.porta).device_id)
+devb = Device.find(Devport.find(@fiberstrand.portb).device_id)
+nra = NetRack.find(Device.find(Devport.find(@fiberstrand.porta).device_id).net_rack_id)
+nrb = NetRack.find(Device.find(Devport.find(@fiberstrand.portb).device_id).net_rack_id)
+loca = Location.find(Devport.find(@fiberstrand.porta).location_id)
+locb = Location.find(Devport.find(@fiberstrand.portb).location_id)
+%>
+<p>
+  <strong>Port-A:</strong><br>
+  Port Name     : <%=link_to devpta.name, devport_path(devpta) %><br>
+  Device Name   : <%= link_to deva.name, device_path(deva) %><br>
+  Rack Name   : <%= link_to nra.name, net_rack_path(nra) %><br>
+  Location    : <%= link_to loca.name, location_path(loca) %><br>
+</p>
+
+<p>
+  <strong>Port-B:</strong><br>
+  Port Name   : <%=link_to devptb.name, devport_path(devptb) %><br>
+  Device Name : <%= link_to devb.name, device_path(devb) %><br>
+  Rack Name   : <%= link_to nrb.name, net_rack_path(nrb) %><br>
+  Location    : <%= link_to locb.name, location_path(locb) %><br>
+</p>
+
+
+<p>
+  <strong>Belongs To Connection:</strong><br>
+    <%if !@fiberstrand.connection_id.nil? && @fiberstrand.connection_id >0 %>
+      <%conn = Connection.find_by_id(@fiberstrand.connection_id)%>
+      Connection Name&emsp;: <%=link_to conn.name, conn %><br>
+      Connection Status&emsp;: <%=conn.status%>
+    <%else%>
+        <font color="#FF0000">No Connection Asggined</font>
+    <%end%>
+</p>
+
+
+<!-- < %= link_to 'Edit', edit_cable_fiberstrand_path(@fiberstrand.cable, @fiberstrand) %> | -->
+<%= link_to 'Edit', edit_fiberstrand_path(@fiberstrand) %> |
+<%= link_to 'List All Fiber Strands in '+ @fiberstrand.cable.name , cable_fiberstrands_path(@fiberstrand.cable) %>

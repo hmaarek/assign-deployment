@@ -1,0 +1,71 @@
+<%device= Device.find(params[:device_id])%>
+<% loc = Location.find_by_id(NetRack.find_by_id(device.net_rack_id).location_id) %>
+<% rack = NetRack.find_by_id(device.net_rack_id) %>
+
+<%=link_to loc.name , location_path(loc)%> /
+<%=link_to rack.name, net_rack_path(rack)%> / 
+<%=link_to device.name, device_path(device)%> / 
+
+<hr>
+
+
+
+
+<h1>Listing Device Ports for <font color="#FF0000"><%= device.name %></h1></font>
+
+<%if device.devports.count>0%>
+  
+  <table>
+    <tr>
+      <th>#</th>
+      <th>Port ID </th>
+      <th>Fiber In ID  </th>
+      <th>Fiber out ID </th>
+      <th>Action</th>
+    </tr>
+  
+  <%count=0%>
+  <% @devports.each do |port| %>
+
+      <%count += 1%>
+
+      <%fiberInName = "N/A"%>
+      <%fiberIn = Fiberstrand.find_by_id(port.fiber_in_id)%>
+      <%fiberInName = fiberIn.name if !fiberIn.nil?%>
+
+      <%fiberOutName = "N/A"%>
+      <%fiberOut = Fiberstrand.find_by_id(port.fiber_out_id)%>
+      <%fiberOutName = fiberOut.name if !fiberOut.nil?%>
+
+    <tr>
+      <td align="left"><%= count%></td>
+      <td align="left"><%= link_to port.name, port %></td>
+      
+      <%if !fiberIn.nil?%>
+        <td align="center"><%=link_to fiberInName,  fiberIn%></td>
+      <%else%>
+        <td align="center"><%=fiberInName %></td>
+      <%end%>
+      
+      <%if !fiberOut.nil?%>
+        <td align="center"><%=link_to fiberOutName,  fiberOut%></td>
+      <%else%>
+        <td align="center"><%=fiberOutName %></td>
+      <%end%>
+
+<!--      <td align="center">< %= port.device.name %></td> -->
+  
+      <td><%= link_to image_tag("/images/Edit_s2.png"), edit_devport_path(port)%>
+      <%= link_to image_tag("/images/Delete_s2.png"), [port], data: { confirm: "Are you sure?" }, :method => :delete %></td>
+       
+    </tr>
+  <% end %>
+  </table>
+  
+  <br />
+<%else%>
+  <h3> <font color="#FF0000">--- No Ports Added to this Device ---</h3></font>
+<%end%>
+
+<%= link_to "Back to " + device.name, device_path(device) %>
+<%= link_to 'Add New Port', new_device_devport_path %> 

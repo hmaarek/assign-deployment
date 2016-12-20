@@ -1,0 +1,23 @@
+<%devport = Devport.find_by_id(params[:id])%>
+<h1>Reseting Port <font colot="#FF0000"><%=devport.name%></h1></font>
+ID:&emsp;&emsp;<%=devport.id%><br>
+Fiber In: <%=Fiberstrand.find_by_id(devport.fiber_in_id).name%> (ID: <%=devport.fiber_in_id%>) 
+<!-- < %= button_to "Reset Fiber in", action: devport.reset_fiber_in(devport) %>, <br> -->
+<button onclick="resetfiberin()">Reset Fiber IN</button>
+Fiber Out:<%=Fiberstrand.find_by_id(devport.fiber_out_id).name%> (ID: <%=devport.fiber_out_id%>)<br>
+
+
+
+<script>
+function resetfiberin() {
+    <%devport.fiber_in_id = 0%>
+    <%devport.save%>
+    
+    <%redirect_to 
+}
+    
+    function resetfiberout() {
+    <%devport.fiber_out_id = 0%>
+    <%devport.save%>
+}
+</script>

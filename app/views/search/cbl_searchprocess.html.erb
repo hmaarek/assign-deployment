@@ -1,0 +1,27 @@
+<h1>Cable Search Results</h1>
+
+
+<%if @count >0%>
+    <hr>
+    Search Found <%=pluralize(@count, "result")%>
+    <br>
+    <!-- < %binding.pry%>
+    < %=params[:msg].html_safe%>
+    -->
+    <table>
+        <th>#</th>
+        <th>Cable Name</th>
+        <th>Cable Size</th>
+        <th>Point A</th>
+        <th>Point B</th>
+        <th>Backhaul Name</th>
+        <%=@message.html_safe%>
+    </table>
+    <br>
+<%else%>
+    <br>
+    <h3><font color = "RED">No Results Found !</font></h3> 
+    <br>
+<%end%>
+<hr>
+<%= link_to 'List All Locations', locations_path %>

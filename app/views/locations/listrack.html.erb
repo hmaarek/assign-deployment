@@ -1,0 +1,260 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing All Tables in dB</h1>
+<hr>
+<br>
+
+
+<h2>1.Locations Table</h2>
+<table>
+  <thead>
+    <tr>
+      <th colspan="6"></th>
+      <th> ID               |</th>
+      <th>Location Name     |</th>
+      <th>Location Address  |</th>
+      <th>Location Type     |</th>
+      <th>No. of Racks      |</th>
+      <th>Created At        |</th>
+      <th>Updated At         </th>
+
+    </tr>
+  </thead>
+  
+  <tbody>
+    <% @locations.each do |location| %>
+      <tr>
+        <td colspan="6"></td>
+        <td align="center"><%= location.id %></td>
+        <td align="center"><%= link_to location.name , location_path(location) %></td> 
+        <td align="center"><%= location.address%></td>
+        <td align="center"><%= location.location_type%></td>      
+        <td align="center"><%= location.net_racks.count %></td>
+        <td align="center"><%= location.created_at%></td>    
+        <td align="center"><%= location.updated_at%></td>      
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<hr>
+<h2>2.Racks Table</h2>
+<table>
+  <thead>
+    <tr>
+      <th>ID | </th>
+      <th>Rack Name | </th>
+      <th>Location Name | </th>
+      <th>No. of installed Devices |</th>
+      <th>Created At        |</th>
+      <th>Updated At         </th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  
+  <tbody>
+    <% @netracks.each do |net_rack| %>
+    
+      <%if @locations.find_by_id(net_rack.location_id).nil?%>
+        <%name="--Location Not Found-- (" + net_rack.location_id.to_s + ")"%>
+      <%else%>
+        <% name = @locations.find_by_id(net_rack.location_id).name %>
+      <%end%>
+      <tr>
+        <td align="center"><%=net_rack.id%></td>
+        <td align="center"><%= link_to net_rack.name , net_rack_path(net_rack) %></td> 
+        <td align="center"><%= name%></td>      
+        <td align="center"><%= net_rack.devices.count %></td>
+        <td align="center"><%= net_rack.created_at%></td>    
+        <td align="center"><%= net_rack.updated_at%></td>      
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>
+<hr>
+
+<h2>3.Devices Table</h2>
+<table>
+  <thead>
+    <tr>
+      <th> ID                       |</th>
+      <th>Device Name               |</th>
+      <th>Device Type               |</th>
+      <th>No. of Ports Configured   |</th>
+      <th>Rack ID                   |</th>
+      <th>Rack Name                 |</th>
+      <th>Created At                |</th>
+      <th>Updated At       </th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  
+  <tbody>
+    <% @devices.each do |device| %>
+    
+      <%if @netracks.find_by_id(device.net_rack_id).nil?%>
+        <%rname="--Rack Not Found-- (" + device.net_rack_id.to_s + ")"%>
+      <%else%>
+        <% rname = @netracks.find_by_id(device.net_rack_id).name %>
+      <%end%>
+    
+      <tr>
+        <td align="center"><%= device.id %></td>
+        <td align="center"><%= link_to device.name , device_path(device) %></td> 
+        <td align="center"><%= device.device_type%></td>
+        <td align="center"><%= device.devports.count %></td>
+        <td align="center"><%= device.net_rack_id%></td>      
+        <td align="center"><%= rname%></td>     <!--Rack Name-->
+        <td align="center"><%= device.created_at%></td>    
+        <td align="center"><%= device.updated_at%></td>      
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>
+
+<hr>
+
+<h2>4.Ports Table </h1> <h3><%=link_to "Clean All Ports", devports_cleanprts_path%></h3>
+<table>
+  <thead>
+    <tr>
+      <th>ID                        |</th>
+      <th>Port Name                 |</th>
+      <th>Fiber In ID               |</th>
+      <th>Fiber Out ID              |</th>
+      <th>Device ID                 |</th>
+      <th>Device Name               |</th>
+      <th>Created At                |</th>
+      <th>Updated At       </th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  
+  <tbody>
+    <% @devports.each do |devport| %>
+    
+      <%if @devices.find_by_id(devport.device_id).nil?%>
+        <%dname="--Device Not Found-- (" + devport.device_id.to_s + ")"%>
+      <%else%>
+        <% dname = @devices.find_by_id(devport.device_id).name %>
+      <%end%>
+    
+      <tr>
+        <td align="center"><%= devport.id %></td>
+        <td align="center"><%= link_to devport.name , devport_path(devport) %></td> 
+        <td align="center"><%= devport.fiber_in_id%></td>
+        <td align="center"><%= devport.fiber_out_id%></td>
+        <td align="center"><%= devport.device_id%></td>      
+        <td align="center"><%= dname%></td>     <!--Device Name-->
+        <td align="center"><%= devport.created_at%></td>    
+        <td align="center"><%= devport.updated_at%></td>      
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+
+<br>
+
+<hr>
+<h2>Cables and Fiber Strands</h2>
+<hr>
+<h2>5.Cables Table</h2>
+<table>
+  <thead>
+    <tr>
+      <th>ID                        |</th>
+      <th>Cable Name                |</th>
+      <th>Size (fibers)             |</th>
+      <th>No. of Active Fibers      |</th>
+      <th>Location A(ID)            |</th>
+      <th>Location B(ID)            |</th>
+      <th>Created At                |</th>
+      <th>Updated At       </th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  
+  <tbody>
+    <% @cables.each do |cable| %>
+    
+      <%if @locations.find_by_id(cable.location_a_id).nil?%>
+        <%laname="--Location Not Found--"%>
+      <%else%>
+        <% laname = @locations.find_by_id(cable.location_a_id).name %>
+      <%end%>
+
+      <%if @locations.find_by_id(cable.location_b_id).nil?%>
+        <%lbname="--Location Not Found--"%>
+      <%else%>
+        <% lbname = @locations.find_by_id(cable.location_b_id).name %>
+      <%end%>
+    
+      <tr>
+        <td align="center"><%= cable.id %></td>
+        <td align="center"><%= link_to cable.name , cable_path(cable) %></td> 
+        <td align="center"><%= cable.size%></td>
+        <td align="center"><%= cable.fiberstrands.count%></td>
+        <td align="center"><%= laname +"("+cable.location_a_id.to_s+")"%></td>  <!--Location A Name-->
+        <td align="center"><%= lbname +"("+cable.location_b_id.to_s+")"%></td>  <!--Location B Name-->
+        <td align="center"><%= cable.created_at%></td>    
+        <td align="center"><%= cable.updated_at%></td>      
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<hr>
+<h2>6.Fiber Strands Table</h2>
+<table>
+  <thead>
+    <tr>
+      <th>ID                        |</th>
+      <th>Fiber Name                |</th>
+      <th>Port A (ID)               |</th>
+      <th>Port B (ID)               |</th>
+      <th>Cable Name (ID)           |</th>
+      <th>Created At                |</th>
+      <th>Updated At       </th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  
+  <tbody>
+    <% @fibers.each do |fiber| %>
+    
+      <%if @cables.find_by_id(fiber.cable_id).nil?%>
+        <%cname="--Cable Not Found--"%>
+      <%else%>
+        <% cname = @cables.find_by_id(fiber.cable_id).name %>
+      <%end%>
+
+      <%if @devports.find_by_id(fiber.porta).nil?%>
+        <%paname="--Port Not Found--"%>
+      <%else%>
+        <% paname = @devports.find_by_id(fiber.porta).name %>
+      <%end%>
+
+      <%if @devports.find_by_id(fiber.portb).nil?%>
+        <%pbname="--Port Not Found--"%>
+      <%else%>
+        <% pbname = @devports.find_by_id(fiber.portb).name %>
+      <%end%>
+    
+      <tr>
+        <td align="center"><%= fiber.id %></td>
+        <td align="center"><%= link_to fiber.name , fiberstrand_path(fiber) %></td> 
+        <td align="center"><%= paname +"("+fiber.porta.to_s+")"%></td>  <!--Port A Name-->
+        <td align="center"><%= pbname +"("+fiber.portb.to_s+")"%></td>  <!--PortbB Name-->
+        <td align="center"><%= cname +"("+fiber.cable_id.to_s+")"%></td>  <!--Cable Name-->
+        <td align="center"><%= fiber.created_at%></td>    
+        <td align="center"><%= fiber.updated_at%></td>      
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,64 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Contract Information for <font color="#FF0000"><%=@contract.contract_name%></h1> </font>
+
+<style>
+.image { 
+   position: relative; 
+   width: 100%; /* for IE 6 */
+}
+
+h2 { 
+   position: absolute; 
+   top: 2px; 
+   left: 50px; 
+   width: 100%; 
+}
+</style>
+
+<p>
+  <strong>Contract Name:</strong>
+  <%= @contract.contract_name %>
+</p>
+
+<p>
+<strong>Customer Name:</strong>
+<%customer = Customer.find_by_id(@contract.customer_id) %>
+<%if customer.nil?%>
+  <font color="#FF0000">No customer Found on this contract!!!</font>
+<%else%>
+   <%=link_to customer.name, customer%>
+   <%=link_to image_tag(customer.avatar.url(:thumb)) , customer%></td>
+<%end%>
+
+</p>
+
+<p>
+<strong>Contract Signed Date</strong>
+<%= @contract.signed_date.day %>/<%= Date::MONTHNAMES[@contract.signed_date.month] %>/<%= @contract.signed_date.year %>
+
+</p>
+
+<p>
+<strong>Contract Expiry Date</strong>
+<%= @contract.expiring_date.day %>/<%= Date::MONTHNAMES[@contract.expiring_date.month] %>/<%= @contract.expiring_date.year %>
+<font color="#FF0000">[<%=(@contract.expiring_date-Date.today).to_i%> days to expire]</font>
+</p>
+
+<p>
+<strong>Description</strong>
+<%= @contract.description %>
+<br>
+
+
+
+<!--
+Need to show all details...link the template import excel sheet
+-->
+
+
+<hr>
+<%= link_to 'Edit', edit_contract_path(@contract) %> |
+<%= link_to 'Delete', @contract, data: { confirm: "Are you sure?" }, :method => :delete %> |
+<!-- < %= link_to 'Add New Rack', new_contract_net_rack_path(@contract) % > |  -->
+<%= link_to 'List All Contracts', contracts_path %> |

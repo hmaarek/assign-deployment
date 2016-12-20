@@ -1,0 +1,95 @@
+<!-- Trace links from the current ID in param up to the very first fiber_id =0-->
+
+
+
+<%id = params[:id]%>
+<%prt = Devport.find_by_id(id)%>
+<%itrt = true%>
+<%cntr=0%>
+<%maxhubs = 100%>
+<%details="Starting "%>
+<h1>Tracing links from <%=prt.name%></h1>
+
+<br>
+<br>
+<br>
+<hr>
+<%reversed=false%>
+<%reversed=true if prt.fiber_out_id ==0%>
+<%location = Location.find_by_id(prt.location_id)%>
+<%locname= location.name%>
+<%=link_to locname, location_path(location),:style=> 'color:#FF0000;'%>
+<%while itrt%>
+    <% break if prt.nil?%>
+    <%location = Location.find_by_id(prt.location_id)%>
+    <%locname = location.name%>
+    <%rackname = NetRack.find_by_id(Device.find_by_id(prt.device_id).net_rack_id).name%>
+    <%devname = Device.find_by_id(prt.device_id).name%>
+    <%hvr_msg = locname + "/" + rackname + "/" + devname%>
+
+     ▓ <span title=<%=hvr_msg%>><%=link_to prt.name, devport_path(prt)%></span> ▓
+    <%details += "Port = "+ prt.name + "<br>"%>
+    <%details += "Device Name = " + devname + "<br>"%>
+    <%details += "Rack Name = " + rackname + "<br>"%>
+    <%details += "Location Name = " + locname + "<br>"%>
+    <%details += "---------------------------------------------<br>"%>
+    
+    
+<!-- break if fid-out is zero...termination point -->
+<!-- if we reversed the trace starting from the end point and moving down to the start point-->
+    <%if !reversed%>
+        <%fid = prt.fiber_out_id%>
+    <%else%>
+        <%fid = prt.fiber_in_id%>
+    <%end%>
+    <%break if fid==0%>
+
+<!-- start from fiber_out and continue using fiber_out then loop (unless reversed, use fiber-in) -->
+
+    <%fiber = Fiberstrand.find_by_id(fid)%>
+    <%break if fiber.nil?%>
+    <%cbl=Cable.find_by_id(fiber.cable_id)%>
+    <------------ <span title=<%=cbl.name%>><%=link_to fiber.name, fiberstrand_path(fiber)%></span> ------------>
+    <%details += "Fiber Name =" + fiber.name + "<br>"%>
+    <%details += "Cable Name =" + cbl.name + "<br>"%>
+    <%details += "---------------------------------------------<br>"%>
+    
+    <!-- get the next port, from portb of the current cable -->
+    <%if !reversed%>
+        <%prt = Devport.find_by_id(fiber.portb)%>
+    <%else%>
+        <%prt = Devport.find_by_id(fiber.porta)%>
+    <%end%>
+    
+    <!-- upto 100 hubs only...after that something went wrong for sure -->
+    <%cntr += 1%>
+    <%break if cntr>maxhubs%>
+    
+<%end%>
+<%=link_to locname, location_path(location),:style=> 'color:#FF0000;'%>
+
+<br>
+<hr>
+<br>
+Hub Count = <%=cntr%><br>
+<%if cntr > maxhubs%>
+    <font color="FF0000">-------> did not reach end of link, aborted after 100 hubs!!! </font>
+<%end%>
+
+<br>
+<br>
+
+<script src="/scripts/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("p").hide();
+    $("button").click(function(){
+        $("p").toggle();
+    });
+});
+</script>
+
+<button>--- Deatils ---</button>
+
+<p><%=details.html_safe%></p>
+

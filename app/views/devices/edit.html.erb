@@ -1,0 +1,10 @@
+<%= render 'navbar' %>
+<h1>Editing Termination Device</h1>
+
+
+<%= form_for(@device) do |f| %>
+    <%= render 'form', :f => f %>
+<%end%>
+
+<%= link_to 'Show', [@device] %> |
+<%= link_to 'Back', net_rack_devices_path(@device.net_rack) %>

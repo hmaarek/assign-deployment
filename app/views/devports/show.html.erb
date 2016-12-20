@@ -1,0 +1,117 @@
+<%= render 'navbar' %>
+<p id="notice"><%= notice %></p>
+
+<h1>Device Port Information for  <font color="#FF0000"><%=@devport.name%></h1></font>
+<div class="image">
+<!-- < % binding.pry %> -->
+<h2><%= @devport.device.net_rack.location.name %></h2> <h31><%= @devport.device.net_rack.name %></h31> <h311><%= @devport.device.name %></h311> <h3111><%= @devport.name %></h3111>
+<%=link_to image_tag("/images/CO_b.jpg"), location_path(@devport.device.net_rack.location) %> <%=link_to image_tag("/images/Rack_s.jpg"), net_rack_path(@devport.device.net_rack) %> <%=link_to image_tag("/images/ODF_s.jpg"), device_path(@devport.device) %> <img src="/images/fiberoptic_port_s.png" >
+<!-- <img src="/images/Rack_s.jpg" ></a> -->
+</div>
+
+<style>
+.image { 
+   position: relative; 
+   width: 100%; /* for IE 6 */
+}
+
+h2 { 
+   position: absolute; 
+   top: 2px; 
+   left: 110px; 
+   width: 100%; 
+}
+</style>
+
+
+<style>
+.image { 
+   position: relative; 
+   width: 100%; /* for IE 6 */
+}
+
+h2 { 
+   position: absolute; 
+   top: 163px; 
+   left: 20px; 
+   width: 100%; 
+}
+
+
+h31 { 
+  font: bold 18px/25px Helvetica, Sans-Serif;
+   position: absolute; 
+   top: 163px; 
+   left: 500px; 
+   width: 100%; 
+}
+h311 { 
+  font: bold 18px/25px Helvetica, Sans-Serif;
+   position: absolute; 
+   top: 183px; 
+   left: 600px; 
+   width: 100%; 
+}
+
+h3111 { 
+  font: bold 18px/25px Helvetica, Sans-Serif;
+   position: absolute; 
+   top: 200px; 
+   left: 800px; 
+   width: 100%; 
+}
+</style>
+
+
+
+<p>
+  <strong>Port Name:</strong>
+  <%= @devport.name %>
+</p>
+
+<p>
+  <strong>Fiber In:</strong><br>
+  ID&emsp;&emsp;&emsp;:<%= @devport.fiber_in_id %> 
+  <%if @devport.fiber_in_id==0%>
+  <font color="#228B22"> (Port is Free)</font>
+  <%end%><br>
+  <%fiber = Fiberstrand.find_by_id(@devport.fiber_in_id) %>
+  <%if !fiber.nil?%>
+      Name&emsp;: <%=link_to fiber.name, fiberstrand_path(fiber) %><br>
+      <%cable=Cable.find_by_id(fiber.cable_id)%>
+      Cable: <%=link_to cable.name, cable_path(cable)%><br>
+<!--      < %=button_to "Reset", reset_port_path(@devport)%>  not needed now, you need to delete the fiber-->
+  <%else%>
+      Name&emsp;: N/A<br>
+      Cable: N/A<br>
+  <%end%>
+</p>
+
+<p>
+  <strong>Fiber Out ID:</strong><br>
+  ID&emsp;&emsp;&emsp;:<%= @devport.fiber_out_id %>
+    <%if @devport.fiber_out_id==0%>
+  <font color="#228B22"> (Port is Free) </font><br>
+  <%end%>
+<br>
+  <%fiber = Fiberstrand.find_by_id(@devport.fiber_out_id) %>
+    <%if !fiber.nil?%>
+      Name&emsp;: <%=link_to fiber.name, fiberstrand_path(fiber) %><br>
+      <%cable=Cable.find_by_id(fiber.cable_id)%>
+      Cable: <%=link_to cable.name, cable_path(cable)%><br>
+  <%else%>
+      Name&emsp;: N/A<br>
+      Cable: N/A<br>
+  <%end%>
+
+</p>
+
+<p>
+  <strong>Termination Device Name:</strong>
+  <%= @devport.device.name %>
+</p>
+
+
+<%= link_to 'Edit', edit_devport_path(@devport) %> |
+<%= link_to 'List All Ports in ' + @devport.device.name, device_devports_path(@devport.device) %>
+<%= link_to 'Trace Links From Here', trace_link_path%>

@@ -1,0 +1,36 @@
+<%= form_for(@cable) do |f| %>
+  <% if @cable.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@cable.errors.count, "error") %> prohibited this cable from being saved:</h2>
+
+      <ul>
+      <% @cable.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :size %><br>
+    <%= f.number_field :size %>
+  </div>
+  
+  <div class="field">
+    <%=f.label :location_a_id, "Select Connected Location A"%> <br>
+    <%=f.collection_select( :location_a_id, Location.all, :id, :name_with_type, prompt: true) %>
+  </div>
+
+  <div class="field">
+    <%=f.label :locationbid, "Select Connected Location B"%> <br>
+    <%=f.collection_select( :location_b_id, Location.all, :id, :name_with_type, prompt: true) %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

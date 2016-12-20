@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  contract_name: MyString
+  customer_id: 1
+  signed_date: 2016-07-21 12:39:45
+  expiring_date: 2016-07-21 12:39:45
+  description: MyText
+
+two:
+  contract_name: MyString
+  customer_id: 1
+  signed_date: 2016-07-21 12:39:45
+  expiring_date: 2016-07-21 12:39:45
+  description: MyText

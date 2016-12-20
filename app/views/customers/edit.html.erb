@@ -1,0 +1,11 @@
+<h1>Editing Customer</h1>
+
+<!-- < %= render 'form' %> -->
+
+<%= form_for @customer , html: { multipart: true } do |f| %>
+    <%= render 'form', :f => f %>
+<%end%>
+
+
+<%= link_to 'Show', @customer %> |
+<%= link_to 'List All Customers', customers_path %>

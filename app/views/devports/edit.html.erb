@@ -1,0 +1,10 @@
+<%= render 'navbar' %>
+<h1>Editing Device Port</h1>
+
+
+<%= form_for(@devport) do |f| %>
+    <%= render 'form', :f => f %>
+<%end%>
+
+<%= link_to 'Show', [@devport] %> |
+<%= link_to 'Back', device_devports_path(@devport.device) %>

@@ -1,0 +1,20 @@
+
+
+<h3>cleaning ports</h3>
+
+<strong>Starting....
+<br>
+System is checking all ports in the dB that are attached to fibers that don't exist anymore!<br>
+The system will:
+<li>1- if any port with a nil fiber-in our fiber-out -> sets the fiberid to zero</li>
+<li>2- Look in ALL ports in the system</li>
+<li>3- checks if the fiber-in is a fake (nil) fiber, if so, sets the fiber_in_id=0 for that port</li>
+<li>4- checks if the fiber-out is a fake (nil) fiber, if so, sets the fiber_out_id=0 for that port</li>
+</strong>
+
+<!-- No. of Dirty Ports = < %=@dirtyPrts%> -->
+
+
+<p>All ports are clean now</p>
+click <%=link_to "here",locations_listrack_path %> to go back to tables
+    

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+p.small {
+    line-height: 0.1;
+}
+p.big {
+    line-height: 2;
+}
+</style>
+
+  <title>Assign</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %> <!-- true -->
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %> <!-- true -->
+  <%= csrf_meta_tags %>
+ 
+ <%=render 'layouts/header'%>
+ 
+</head>
+<!-- Display any flashes...-->
+<% flash.each do |key, value| %>
+        <div class="alert alert-<%= key %>"><%= value %></div>
+      <% end %>
+
+
+<div id="main-container" class="container">
+    <div class="row">
+        <div class="col-xs-2">
+          <!--<h3>Assign Tool</h3> -->
+        </div>
+        <div class="col-xs-11">
+            <%= yield %>
+        </div>
+    </div>
+</div>
+
+
+<!--
+< %= yield %>
+-->
+<%=render 'layouts/footer' %>
+
+</body>
+</html>

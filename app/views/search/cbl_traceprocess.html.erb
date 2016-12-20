@@ -1,0 +1,182 @@
+<head>
+
+ <script src="https://js.pusher.com/3.2/pusher.min.js"></script>
+<!-- <script src="/scripts/pusher.min.js"></script> <!-- required Pusher library for the realtime magic  -->
+<script src="/scripts/jquery.min.js"></script>
+<!-- <script src="/scripts/home.js"></script> <!-- contains the form submission logics and handle realtime events -->
+
+
+
+
+<script>
+
+ function InitPusher()
+  {
+    // Instantiate Pusher
+  var push_chanel = 'link_trace_'+ <%=current_user.id.to_s%>
+  var pusher = new Pusher('7f6f786b11c7ec5320a9', {
+      encrypted: true
+    }); // Change it to your Pusher APP Key   /////ENV['PUSHER_APP_KEY'
+  var channel = pusher.subscribe(push_chanel) // The Channel you want to subscribe to
+
+// alert("Init is called, channel = " + channel);
+
+  channel.bind('update', function(data) { // Bind to an event on our channel, in our case, update
+    var messageBox = $('#search_process').children('.messages')
+    var progressBar = $('#realtime-progress-bar')
+
+    progressBar.width(data.progress+"%")
+    messageBox.html(data.message)
+
+    }
+
+  )
+  
+    channel.bind('reset', function(data) { // Bind to an event on our channel, in our case, update
+    var progressBar = $('#realtime-progress-bar')
+    progressBar.width("0%")
+
+    }
+    )
+
+  };
+  //http://stackoverflow.com/questions/17600093/rails-javascript-not-loading-after-clicking-through-link-to-helper
+  $( document ).ready( InitPusher );
+  $(document).on('page:change', InitPusher);
+
+</script>
+
+</head>
+
+
+<h1>Pick from the lists </h1>
+
+
+<%= form_tag search_pointtrace_path do%>
+
+Message = <%=@message1%><br>
+    Point A: <%=@qA%><br>
+    Point B: <%=@qB%><br>
+    
+    <!--
+    Search Type A: < %=@searchtypeA%><br>
+    Search Type B: < %=@searchtypeB%><br>
+    -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6" style="background-color:lightyellow">
+            <h3> Select Point A: </h3><br>
+            <div class="field">
+           <!--     <div class="col2-md-d"> -->
+                <!-- put the list of locaiton on the top first...-->
+                <%cntr=0%>
+                <%@locListA.each do |ll|%>    
+                    <%locID = ll[1]%>
+                    <%loc= Location.find_by_id(locID)%>
+            
+                    <!-- < %msg = "Location Name: " + loc.name + ", Type: " + loc.location_type%> -->
+                    <%msg = "Location: " + loc.name%>
+                    <%hvr_msg = "Location-Type=" + loc.location_type%>
+                    <span title=<%=hvr_msg%>>
+                        
+                    <%if cntr==0%>
+                          <%= radio_button_tag :selected_itm_a, "L"+ loc.id.to_s, checked: true%>
+                    <%else%>
+                         <%= radio_button_tag :selected_itm_a, "L"+ loc.id.to_s%>
+                    <%end%>
+                      <%= label_tag :selected_itm, msg %>  <!--, :value => "dev"-->
+                      <br>
+                    </span>
+                    <%cntr += 1%>
+                <%end%>        
+                    
+                <%@devListA.each do |dd|%>
+                    <%devID = dd[1]%>
+                    <%dev= Device.find_by_id(devID)%>
+
+                    <%hvr_msg = "Device-Type=" + dev.device_type + ",Location=" + (Location.find_by_id((NetRack.find_by_id(dev.net_rack_id)).location_id)).name%>
+                    <span title=<%=hvr_msg%>>
+            
+                    <%msg = "Device: " + dev.name%>
+                      <!-- < %= radio_button_tag :selected_itm_a, [0=>dev.id.to_s, 1=>"dev"]%> -->
+                    <%if cntr==0%>                      
+                        <%= radio_button_tag :selected_itm_a, "D"+ dev.id.to_s, checked: true%>
+                    <%else%>
+                        <%= radio_button_tag :selected_itm_a, "D"+ dev.id.to_s%>
+                    <%end%>
+                        <%= label_tag :selected_itm, msg %>  <!--, :value => "dev"-->
+                      <br>
+                      </span>
+                    <% cntr += 1 %>
+                <%end%>
+<!--                </div> -->
+            </div>
+        </div>
+
+    <div class="col-sm-6" style="background-color:lightblue";>
+        <h3> Select Point B: </h3><br>
+            <div class="field">
+<!--            <div class="col2-md-6">  -->
+
+                <%cntr=0%>
+                <!-- put the list of locaiton on the top first...-->
+                <%@locListB.each do |ll|%>    
+                    <%locID = ll[1]%>
+                    <%loc= Location.find_by_id(locID)%>
+            
+                    <%msg = "Location: " + loc.name%> 
+                    <%hvr_msg = "Location-Type=" + loc.location_type%>
+                    <span title=<%=hvr_msg%>>          <!-- < %= radio_button_tag :selected_itm_b, {0=>loc.id, 1=>"loc"}%> -->
+                    <%if cntr==0%>
+                        <%= radio_button_tag :selected_itm_b, "L"+ loc.id.to_s, checked: true %>
+                    <%else%>
+                        <%= radio_button_tag :selected_itm_b, "L"+ loc.id.to_s%>
+                    <%end%>
+                    <%= label_tag :selected_itm, msg %>  <!--, :value => "dev"-->
+                      <br>
+                    </span>
+                    <%cntr +=1 %>
+                <%end%>        
+                    
+                <%@devListB.each do |dd|%>
+                    <%devID = dd[1]%>
+                    <%dev= Device.find_by_id(devID)%>
+                     <%hvr_msg = "Device-Type=" + dev.device_type + ",Location=" + (Location.find_by_id((NetRack.find_by_id(dev.net_rack_id)).location_id)).name%>
+                    <span title=<%=hvr_msg%>>
+    
+                    <%msg = "Device: " + dev.name%>           
+                    <%if cntr==0%>
+                        <%= radio_button_tag :selected_itm_b, "D"+ dev.id.to_s, checked: true%>
+                    <%else%>
+                        <%= radio_button_tag :selected_itm_b, "D"+ dev.id.to_s%>
+                    <%end%>
+                    <%= label_tag :selected_itm, msg %>  <!--, :value => "dev"-->
+                      <br>
+                      </span>    
+                      <%cntr +=1 %>
+                <%end%>
+<!---            </div>  -->
+        </div>
+    </div>
+
+</div>
+
+<hr>
+
+<!------------------------------------------- Search Button --------------------------------->
+    <div id= "search_process" class="container">
+<%=button_to 'Search', search_pointtrace_path,  method: :get, class:"btn btn-info btn-block"%>
+<hr>
+      <div id= "search_process" class="progress progress-striped active " >
+        <div class="progress-bar progress-bar-info" id='realtime-progress-bar' role="progressbar"style="width: 0%"></div>
+      </div>
+        
+        <p class="messages"></p>      
+
+
+
+<!--  <a href="#" class="btn btn-info btn-block" role="button"><span class="glyphicon glyphicon-search"></span> Search</a> -->
+</div>
+<%end%>
+
+

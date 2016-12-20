@@ -1,0 +1,56 @@
+<%cable= Cable.find(params[:cable_id])%>
+<%=link_to cable.name , location_path(cable)%> /
+<hr>
+
+<h1>Listing Connected Fibers for Cable: <font color="#FF0000"><%=cable.name %></h1></font>
+
+<%if cable.fiberstrands.count>0%>
+  
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Port-A</th>
+      <th>Port-B</th>
+      <th width="8%" >Action</th>
+    </tr>
+
+  <% @fiberstrands.each do |fs| %>
+  
+    <%porta = Devport.find_by_id(fs.porta)%>
+    <%if porta.nil?%>
+      <%portaName = "--"%>
+    <%else%>
+      <%portaName = porta.name%>
+    <%end%>
+
+    <%portb = Devport.find_by_id(fs.portb)%>
+    <%if portb.nil?%>
+      <%portbName = "--"%>
+    <%else%>
+      <%portbName = portb.name%>
+    <%end%>
+    
+    <tr>
+      <td align="center"><%=link_to fs.name,fs%></td>
+      <td align="center"><%=portaName %></td>
+      <td align="center"><%=portbName %></td>
+      <td><%=link_to image_tag("/images/Edit_s2.png"), edit_fiberstrand_path(fs)%>
+      <%=link_to image_tag("/images/Delete_s2.png"), fs, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+  
+  <% end %>
+  </table>
+  
+  <br>
+  
+  Number of free fibers in that cable: <font color="FF0000"><%=@fiberstrands.first.cable.size -  @fiberstrands.count %></font>
+  
+  <br>
+  
+  <br>
+  
+<%else%>
+  <h3> <font color="#FF0000">--- No Fibers connected in this cable ---</h3></font>
+<%end%>
+<%= link_to "Back to " + cable.name, cable_path(cable) %>
+<%= link_to 'Connect New Fiber', new_cable_fiberstrand_path %> 

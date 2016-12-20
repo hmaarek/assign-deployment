@@ -1,0 +1,169 @@
+<p id="notice"><%= notice %></p>
+
+
+<!-- < %binding.pry%>  -->
+<%if @ShowBackhaulsOnly%>  <!-- backhauls' table -->
+<h1>Listing All Backhauls</h1>
+<table class="table-bordered">
+  <thead>
+    <tr>
+      <th>Backhaul Name</th>
+      <th>Type</th>
+      <th>RFS Status</th>
+      <th>Description</th>
+      <th>Total Implemented Fiber</th>
+      <th>Active Fibers</th>
+      <th>Reserved Fibers</th>
+      <th>Allocated Fibers</th>
+      <th>% of Fiber Allocation</th>
+      <th>Available Spare Fibers</th>
+      <th>% of Spare Fibers Available</th>
+      <th>FLAG</th>
+      <th colspan=2>Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @backhauls.each do |backhaul| %>
+    
+    <%capacity = backhaul.calculateCapacity%>
+      <tr>
+        <td align="center"><%= link_to backhaul.name, backhaul%></td>
+        
+        <%btype = "Backhul"%>
+        <%btype = "Feeder" if (!backhaul.bkh_type.nil? && backhaul.bkh_type==1)%>
+        
+        <td align="center"><%=btype%></td>
+        <td align="center"><%=backhaul.rfs_status%></td>
+        <td align="center"><%=backhaul.descript%></td>
+        <td align="center"><%=capacity["TotalFiber"]%></td>
+        <td align="center"><%=capacity["ActiveFiber"]%></td>
+        <td align="center"><%=capacity["ReservedFiber"]%></td>
+        <td align="center"><%=capacity["AllocatedFiber"]%></td>
+        <td align="center"><%=capacity["PercentAllocation"]%>%</td>
+        <td align="center"><%=capacity["AvailableFiber"]%></td>
+        <td align="center"><%=capacity["PercentAvailableFiber"]%>%</td>
+        <%if capacity["Flag"]%>
+          <td align="center"><img src="/images/Alert-Icon-s.png"></td>  <!--Ascii 219 -->
+        <%else%>
+          <td align="center"><img src="/images/ok-icon-s.png"></td>
+        <%end%>
+        <%if (logged_in? && current_user.user_type<=1) %>
+          <td><%= link_to image_tag("/images/Edit_s2.png"), edit_backhaul_path(backhaul) %></td>
+          <td><%= link_to image_tag("/images/Delete_s2.png"), backhaul, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <%end%>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%else%>   <!-- Feeders' Table -->
+<h1>Listing All Feeders</h1>
+
+
+<a href="#summary">click here to go to Feeders Summary</a>
+
+
+
+<table class="table-bordered">
+  <thead>
+    <tr>
+      <th>Feeder Name</th>
+      <th>Type</th>
+      <th>RFS Status</th>
+      <th>Description</th>
+      <th>Active Fibers</th>
+      <th>Reserved Fibers</th>
+      <th>Allocated Fibers</th>
+      <th>% of Fiber Allocation</th>
+      <th>Available Spare Fibers</th>
+      <th>Total Fibers</th>
+      <th>% of Spare Fibers Available</th>
+      <th>FLAG</th>
+      <th colspan=2>Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <%grandTotalFibers=0%>
+    <%grandAllocatedFibers = 0%>
+    <% @backhauls.each do |backhaul| %>
+    
+    <%capacity = backhaul.calculateCapacity%>
+      <tr>
+        <td align="center"><%= link_to backhaul.name, backhaul%></td>
+        
+        <%btype = "Backhul"%>
+        <%btype = "Feeder" if (!backhaul.bkh_type.nil? && backhaul.bkh_type==1)%>
+        
+        <%totalFiber = capacity["AvailableFiber"].to_i + capacity["AllocatedFiber"].to_i%>
+        <%grandTotalFibers += totalFiber%>
+        <%grandAllocatedFibers += capacity["AllocatedFiber"].to_i%>
+        
+        <td align="center"><%=btype%></td>
+        <td align="center"><%=backhaul.rfs_status%></td>
+        <td align="center"><%=backhaul.descript%></td>
+        <td align="center"><%=capacity["ActiveFiber"]%></td>
+        <td align="center"><%=capacity["ReservedFiber"]%></td>
+        <td align="center"><%=capacity["AllocatedFiber"]%></td>
+        <td align="center"><%=capacity["PercentAllocation"]%>%</td>
+        <td align="center"><%=capacity["AvailableFiber"]%></td>
+        <td align="center" ><%=totalFiber%></td>
+        <td align="center"><%=capacity["PercentAvailableFiber"]%>%</td>
+        <%if capacity["Flag"]%>
+          <td align="center"><img src="/images/Alert-Icon-s.png"></td>  <!--Ascii 219 -->
+        <%else%>
+          <td align="center"><img src="/images/ok-icon-s.png"></td>
+        <%end%>
+        <%if (logged_in? && current_user.user_type<=1) %>
+          <td><%= link_to image_tag("/images/Edit_s2.png"), edit_backhaul_path(backhaul) %></td>
+          <td><%= link_to image_tag("/images/Delete_s2.png"), backhaul, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <%end%>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h3 id="summary">Feerders Summary:</h3>
+
+<table class="table table-condensed">
+    <tr>
+    <th></th>
+    <th scope="col" width="50%"></th>
+    </tr>
+    
+    <tr class="info">
+    <th scope="row">Total number of Feerders:</th>
+    <td><strong><%=@backhauls.count %></strong></td>
+    </tr>
+
+    <tr>
+    <th scope="row">Total Fibers:</th>
+    <td><%=grandTotalFibers%></td>
+    </tr>
+
+    
+    <tr>
+    <th scope="row">Total Allocated Fibers:</th>
+    <td><%=grandAllocatedFibers%></td>
+    </tr>
+    
+    <tr>
+    <th scope="row">Total Percentage of Fiber Allocation</th>
+    <td><%=((grandAllocatedFibers.to_f*100) / grandTotalFibers).ceil%>%</td>
+    </tr>
+
+
+</table>
+
+
+<%end%>
+
+
+
+
+
+
+<br>
+
+<%= link_to 'Add New Backhaul', new_backhaul_path %>

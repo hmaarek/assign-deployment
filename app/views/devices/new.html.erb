@@ -1,0 +1,10 @@
+<%= render 'navbar' %>
+<h1>Adding new Termination Device for <font color="#FF0000"><%=@device.net_rack.name%></font></h1>
+
+<%= form_for([@device.net_rack, @device]) do |f| %>
+
+    <%= render 'form', :f => f %>
+<%end%>
+
+
+<%= link_to 'List all devices in '+@device.net_rack.name, net_rack_devices_path(@device.net_rack) %>

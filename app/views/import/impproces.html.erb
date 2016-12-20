@@ -1,0 +1,26 @@
+<h1>Import Process</h1>
+
+
+<%if !@file.nil?%>
+<h3>Importing:  <%=@file.original_filename%> ...</h3>
+<%end%>
+
+<%if !@backhaulID.nil?%>
+
+    <%if @backhaulID==0%>
+        <%=@msg.html_safe%>
+        
+    <%else%>
+    
+        <%backhaul =Backhaul.find_by_id(@backhaulID)%>
+        
+        <h3>Backhaul name created is: <%= link_to backhaul.name, backhaul%></h3>
+        ( id is: <%=@backhaulID%> )
+        
+        <hr>
+        See details of  <%= link_to backhaul.name, backhaul%><br>
+    <%end%>        
+<%else%>
+    <h3><font color="#FF0000"> ERROR: Backhaul Not Found!!! </font></h3>
+<%end%>
+

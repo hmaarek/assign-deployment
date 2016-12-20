@@ -1,0 +1,52 @@
+ <!-- < %= form_for([@fiberstrand.cable, @fiberstrand]) do |f| %> -->
+
+  <% if @fiberstrand.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@fiberstrand.errors.count, "error") %> prohibited this Fiber Strand from being saved:</h2>
+
+      <ul>
+      <% @fiberstrand.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name, 'Name or Fiber Number' %><br />
+    <%= f.text_field :name %>
+  </div>
+  
+  <%cablea = @fiberstrand.cable.location_a_id.to_s%>
+  <div class="field">
+    <%=f.label :portaid, "Select Connected Port A (" + Location.find(cablea).name + ")"%> <br>
+    <!-- < %=f.collection_select( :porta, Devport.where("location_id = " + cablea), :id, :name, prompt: true) %>  -->
+    <%=f.collection_select( :porta, @fiberstrand.list_ports_a, :id, :name, prompt: true) %>
+  </div>
+
+  <%cableb = @fiberstrand.cable.location_b_id.to_s%>
+  <div class="field">
+    <%=f.label :portbid, "Select Connected Port B (" + Location.find(cableb).name + ")"%> <br>
+    <!-- < %=f.collection_select( :portb, Devport.where("location_id = " + cableb), :id, :name, prompt: true) %>  -->
+    <%=f.collection_select( :portb, @fiberstrand.list_ports_b, :id, :name, prompt: true) %>
+  </div>
+
+
+  <div class="field">
+    <%=f.label :connection_id, "Select Connection From List"%> <br>
+    <%= f.collection_select( :connection_id, Connection.all, :id, :name, prompt: true) %>
+  </div>
+
+
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+  <hr>
+  <br>
+  <%=link_to "Goto Cable Point A: " + Location.find(cablea).name,  location_path(cablea) %>
+  <br>
+  <%=link_to "Goto Cable Point B: " + Location.find(cableb).name,  location_path(cableb) %>
+  <br>
+  <br>
+<!-- < % end %> -->

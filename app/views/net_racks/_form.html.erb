@@ -1,0 +1,35 @@
+<!-- < %= form_for([@net_rack.location, @net_rack]) do |f| %> -->
+<!-- < %= form_for([@location, @net_rack]) do |f| %>  -->
+
+  <% if @net_rack.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@net_rack.errors.count, "error") %> prohibited this net_rack from being saved:</h2>
+
+      <ul>
+      <% @net_rack.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :size, "Size (Units)" %><br />
+    <%= f.number_field :size %>
+  </div>
+  
+  <!-- all racks created with the form are true racks (rack_type=1) -->
+    <div class="field">
+  &emsp;  <%=f.number_field :rack_type, :value=>1, hidden:true%>
+  </div>
+
+  
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<!-- < % end %> -->

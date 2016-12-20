@@ -1,0 +1,36 @@
+
+jobName = "Job_Auto_Patch_" + @location.name + "_" + Time.zone.now.strftime("%A %d-%b-%Y")
+
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "PortMap") do |sheet|
+    wb.styles do |s|
+        blue_cell   = s.add_style :bg_color => "00B0F0", :fg_color => "FF", :sz => 14, :alignment => { :horizontal=> :center }
+        green_cell  = s.add_style :bg_color => "92D050", :fg_color => "FF", :sz => 14, :alignment => { :horizontal=> :center }
+        
+        
+        
+        sheet.add_row ["Job Name", "Location Name"]
+        sheet.add_row [jobName , @location.name]
+        sheet.add_row ["Rack A Name","Device A Name","Port A Name", "Rack B Name","Device B Name","Port B Name",], :style => [blue_cell,blue_cell,blue_cell,blue_cell, green_cell, green_cell, green_cell, green_cell ]
+    end
+
+    indx=0
+    @ports_A.each do |prtIDa|
+        prta = Devport.find(prtIDa)
+        dvca = Device.find(prta.device_id)
+        racka = NetRack.find(dvca.net_rack_id)
+        loca = Location.find(racka.location_id)
+
+        prtIDb = @ports_B[indx]
+        prtb = Devport.find(prtIDb)
+        dvcb = Device.find(prtb.device_id)
+        rackb = NetRack.find(dvcb.net_rack_id)
+        locb = Location.find(rackb.location_id)
+
+
+        sheet.add_row [racka.name, dvca.name, prta.name, rackb.name, dvcb.name, prtb.name]
+        
+        indx += 1
+    end
+
+ end

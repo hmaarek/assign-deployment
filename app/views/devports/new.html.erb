@@ -1,0 +1,15 @@
+<%= render 'navbar' %>
+<h1>Adding new Port for  <font color="#FF0000"><%=@device.name%></h1></font>
+
+
+<!-- 
+This is a new port added, no connected fibers. So set them as zeros by default
+-->
+<%@devport.fiber_in_id = 0%>
+<%@devport.fiber_out_id = 0%>
+
+<%= form_for([@devport.device, @devport]) do |f| %>
+    <%= render 'form', :f => f %>
+<%end%>
+
+<%= link_to 'List all Ports in '+@devport.device.name, device_devports_path(@devport.device) %>

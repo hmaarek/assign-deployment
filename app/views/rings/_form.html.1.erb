@@ -1,0 +1,28 @@
+<%= simple_form_for(@ring) do |f| %>
+  <%= f.error_notification %>
+
+<hr>
+
+<%= bootstrap_form_for(@ring) do |f| %>
+  <%= f.text_field :name %>
+  <%= f.text_field :description %>
+  
+  <%= f.submit "Create" %>
+<% end %>
+
+
+<hr>
+  <div class="form-input">
+    <%= f.input :name%>
+    <br>
+   <%= f.input :description %>
+  </div>
+<br>
+  <div class="form-actions">  <%= f.button :submit %>
+  </div>
+<% end %>
+
+
+
+ <!-- < %= f.label :name, "Ring Name" %> < %= f.text_field :name %> -->
+ <!--    < %= f.label :name, "Description" %> < %= f.text_field :description %> -->

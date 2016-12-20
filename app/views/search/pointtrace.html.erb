@@ -1,0 +1,38 @@
+<h1>2 Points Final Search Results</h1>
+
+
+<%if @count >0%>
+    <hr>
+    Search Found <%=pluralize(@count, "result")%>
+    <br>
+    <!-- < %binding.pry%>
+    < %=params[:msg].html_safe%>
+    -->
+    <%indx=0%>
+    <table>
+        <tr>
+        <th>#</th>
+        <th>Connection ID</th>
+        <th>Connection Status</th>
+        <th>Link Details </th>
+        </tr>
+        <%@conn_segments.each do |msg|%>
+            <tr>
+                <td><%=indx+1%></td>
+                <%conn= Connection.find(@connList[indx])%>
+                <td><%=link_to conn.name, conn%></td>
+                <td><%=conn.status%></td>
+                <td><%=msg.html_safe%></td>
+            </tr>
+            <%indx += 1%>
+        <%end%>
+        
+    </table>
+    <br>
+<%else%>
+    <br>
+    <h3><font color = "RED">No Results Found !</font></h3> 
+    <br>
+<%end%>
+<hr>
+<%= link_to 'List All Locations', locations_path %>

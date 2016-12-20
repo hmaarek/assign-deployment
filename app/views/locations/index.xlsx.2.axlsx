@@ -1,0 +1,14 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "PortMap") do |sheet|
+    wb.styles do |s|
+        blue_cell = s.add_style :bg_color => "00B0F0", :fg_color => "FF", :sz => 14, :alignment => { :horizontal=> :center }
+        green_cell =  s.add_style  :bg_color => "92D050", :fg_color => "FF", :sz => 20, :alignment => { :horizontal=> :center }
+        sheet.add_row ["Name","Type"], :style => [green_cell, blue_cell]
+    end
+
+
+    @locations.each do |loc|
+        sheet.add_row [loc.name, loc.location_type]
+    end
+
+ end

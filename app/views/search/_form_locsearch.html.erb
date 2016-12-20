@@ -1,0 +1,33 @@
+<%= form_tag search_locationsearch_path do%>
+  <%= label_tag(:q, "Search for:") %>
+  <%= text_field_tag(:q) %>
+  
+  
+  <%= submit_tag("Search") %>
+ <br> 
+ <br>
+  <a href="#" id="advancedsearch">Advanced Search</a>
+
+<br>
+<br>
+  <p_fAdvanced>
+    
+ <b>RFS Date:</b><br>
+ From: <%= date_field_tag(:rfs_from) %> --> To: <%= date_field_tag(:rfs_to) %><br>
+  
+    
+    
+  </p_fAdvanced>
+  
+  
+<% end %>
+
+<hr>
+<script>
+$(document).ready(function(){
+    $("p_fAdvanced").hide();
+    $("#advancedsearch").click(function(){
+        $("p_fAdvanced").toggle();
+    });
+});
+</script>

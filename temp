@@ -1,0 +1,22 @@
+<!--
+<% spreadsheet = Roo::Spreadsheet.open(@file)%>
+<% header = spreadsheet.row(1) %>
+<strong><%=header%></strong><br>
+
+<%(2..spreadsheet.last_row).each do |i| %>
+    
+    <%row = Hash[[header, spreadsheet.row(i)].transpose]%>
+
+    <%qstr = row["CO ID"]%>
+    <!-- < %binding.pry%> -->
+    <%qstr2 = qstr.delete("\s") if !qstr.nil?%>
+    <%qstr2=" " if qstr2.nil?%>
+    <%=Location.import_location(qstr2)%>
+       
+    <% qstr = row["Rack ID"]%>
+    <%qstr2 = qstr.delete("\s") if !qstr.nil?%>
+    <%qstr2=" " if qstr2.nil?%>
+   <!-- < %=NetRack.import_rack(qstr2, co)%><br> -->
+  
+
+<%end%>

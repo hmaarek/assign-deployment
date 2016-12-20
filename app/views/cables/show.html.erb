@@ -1,0 +1,222 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Cable Information for: <br><font color="#FF0000"><%=@cable.name%></h1> </font>
+<!--
+<div class="image">
+
+<h2>< %= @cable.name %></h2>
+<img src="/images/cable.jpg" >  <!--style="float:center"-- >
+</div>
+
+<style>
+.image { 
+   position: relative; 
+   width: 100%; /* for IE 6 */
+}
+
+h2 { 
+   position: absolute; 
+   top: 2px; 
+   left: 50px; 
+   width: 100%; 
+}
+</style>
+-->
+
+
+<!----------Test: list info in a table ------->
+
+<% if @cable.location_a_id.nil?%>
+    <%loca = "--"%>
+<%else%>
+      <%loca= link_to Location.find(@cable.location_a_id).name, location_path(@cable.location_a_id) %>
+<%end%>
+
+
+<% if @cable.location_b_id.nil?%>
+    <%locb = "--"%>
+<%else%>
+      <%locb= link_to Location.find(@cable.location_b_id).name, location_path(@cable.location_b_id) %>
+<%end%>
+
+
+<table class="table table-condensed">
+    <tr>
+    <th></th>
+    <th scope="col"></th>
+    </tr>
+    
+    <tr class="info">
+    <th scope="row">Cable Name:</th>
+    <td><strong><%= @cable.name %></strong></td>
+    </tr>
+    
+    <tr>
+    <th scope="row">Location A</th>
+    <td><%=loca%></td>
+    </tr>
+    
+    <tr>
+    <th scope="row">Location B</th>
+    <td><%=locb%></td>
+    </tr>
+
+    <tr>
+    <th scope="row">Cable Size</th>
+    <td><%=@cable.size%></td>
+    </tr>
+
+    <tr>
+    <th scope="row">Connected Fibers</th>
+    <td><%=@cable.fiberstrands.count%></td>
+    </tr>
+
+    <tr>
+    <th scope="row">Free Fibers</th>
+    <td><%= @cable.size - @cable.fiberstrands.count%></td>
+    </tr>
+
+
+</table>
+
+<hr>
+
+
+<!-- < %binding.pry%> -->
+<%if @cable.fiberstrands.count>0%>
+<h3>Listing Fibers and Connections:</h4></font>
+<%@fiberstrands = @cable.fiberstrands%>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Port-A</th>
+      <th>Port-B</th>
+      <th>Connection ID</th>
+      <th>Connection Status </th>
+      <th>Customer Name</th>
+      <th width="8%" >Action</th>
+    </tr>
+
+  <% @fiberstrands.each do |fs| %>
+  
+    <%porta = Devport.find_by_id(fs.porta)%>
+    <%if porta.nil?%>
+      <%portaName = "--"%>
+    <%else%>
+      <%portaName = porta.name%>
+    <%end%>
+
+    <%portb = Devport.find_by_id(fs.portb)%>
+    <%if portb.nil?%>
+      <%portbName = "--"%>
+    <%else%>
+      <%portbName = portb.name%>
+    <%end%>
+    
+    <%connName = "N/A"%>
+    <%customerName = "--"%>
+    <%connStatus = "--"%>
+    <%connID = fs.connection_id%>
+    <%if !connID.nil? && connID > 0%>
+        <%conn = Connection.find_by_id(connID)%>
+        <%connName  =conn.name%>
+        <%connStatus  =conn.status%>
+        <%color = "BLACK"%>
+        <%color = "OrangeRed" if connStatus.casecmp("LIVE")==0%>
+        <%color = "BLUE" if connStatus.casecmp("RESERVED")==0%>
+        <%customerID  =conn.customer_id%>
+    <%end%>
+
+
+    
+    <tr>
+      <td align="center"><%=link_to fs.name,fs%></td>
+      <td align="center"><%=portaName %></td>
+      <td align="center"><%=portbName %></td>
+
+<!--Connection Info:--->
+      <%if !conn.nil?%>
+        <td align="center"><%=link_to connName,  conn%></td>
+      <%else%>
+        <td align="center"><%=connName %></td>
+      <%end%>
+      <td align="center" ><font color="<%=color%>"><%=connStatus%></font></td>
+
+
+      <%if !customerID.nil? && customerID>0%>
+        <%customer = Customer.find_by_id(customerID)%>
+        <td align="center"><%=link_to customer.name,  customer%></td>
+      <%else%>
+        <td align="center"><%=customerName %></td>
+      <%end%>
+
+
+      <td><%=link_to image_tag("/images/Edit_s2.png"), edit_fiberstrand_path(fs)%>
+      <%=link_to image_tag("/images/Delete_s2.png"), fs, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+  
+  <% end %>
+  </table>
+<%end%>  
+  <br>
+<!-- 
+  < %if @cable.fiberstrands.count>0%>
+    Number of free fibers in that cable: <font color="FF0000">< %=@fiberstrands.first.cable.size -  @fiberstrands.count %></font>
+  < %else%>
+    Number of free fibers in that cable: <font color="FF0000">< %=@cable.size%>
+  < %end%>
+-->
+  <br>
+
+
+<!-------------------------------------------->
+
+
+<!--
+<hr>
+<p>
+  <strong>Name:</strong>
+  < %= @cable.name %>
+</p>
+<p>
+<strong>Location A Name:</strong>
+< % if @cable.location_a_id.nil?%>
+    <font color="#FF0000">This Cable has no location-A assiciated to it. Please <%=link_to 'Edit', edit_cable_path(@cable) %> and add location-A</font>
+< %else%>
+      < %= link_to Location.find(@cable.location_a_id).name, location_path(@cable.location_a_id) %>
+< %end%>
+</p>
+<p>
+<strong>Location B Name:</strong>
+< % if @cable.location_b_id.nil?%>
+    <font color="#FF0000">This Cable has no location-B assiciated to it. Please < %=link_to 'Edit', edit_cable_path(@cable) %> and add location-B</font>
+< %else%>
+
+      < %= link_to Location.find(@cable.location_b_id).name, location_path(@cable.location_b_id) %>
+< %end%>
+</p>
+<p>
+  <strong>Size (total fiber strands contained):</strong>
+  < %= @cable.size %>
+<br>
+  <strong>Total Used/Connected Fibers:</strong> < %=@cable.fiberstrands.count%>
+<br>
+Free Fibers: <font color="#FF0000">< %= @cable.size - @cable.fiberstrands.count%></font>
+</p>
+-->
+
+<hr>
+
+<!--Need to 
+    - list all connections passing through this cable (use backhaul Id here and in connections)
+    - report on Dark, Reserved and Live fibers on this cable
+-->
+
+
+<%= link_to_if (logged_in? && current_user.user_type<=1),  'Edit', edit_cable_path(@cable) %> |
+<%= link_to_if (logged_in? && current_user.user_type<=1),  'Delete', @cable, method: :delete, data: { confirm: 'Are you sure?' } %>
+
+<!-- < %= link_to 'Add New Rack', new_cable_net_rack_path(@cable) % > |  -->
+<%= link_to 'List All Cables', cables_path %> |
+<%= link_to_if (logged_in? && current_user.user_type<=1),  'Connect a Fiber in this Cable', new_cable_fiberstrand_path(@cable) %> |
+<%= link_to 'List all connected fibers in this cable', cable_fiberstrands_path(@cable) %>

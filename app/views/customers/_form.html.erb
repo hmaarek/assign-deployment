@@ -1,0 +1,113 @@
+<!---
+form_for @product, html: { multipart: true } do |f|
+  = f.fields_for :asset do |asset_form|
+    = asset_form.file_field :image
+-->
+
+
+
+<%= form_for @customer , html: { multipart: true } do |f| %>
+  <% if @customer.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@customer.errors.count, "error") %> prohibited this customer from being saved:</h2>
+
+      <ul>
+      <% @customer.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <hr>
+<table>
+
+
+  <colgroup>
+    <col width ="50%">
+    <col width ="50%" >
+  </colgroup>
+<!--
+<style>
+thead {color:green;}
+tbody {color:black;}
+tfoot {color:red;}
+
+table, td {
+    border: 1px solid white;
+}
+</style>
+-->
+<tbody>
+<tr>
+  <td>
+  <div class="field">
+  <%= f.label :name, "Customer/Corporate Name" %><br>
+  <%= f.text_field :name %>
+  </div>
+
+  <strong>Enter Contact Details:</strong><br>
+    <div class="field">
+      <%= f.label :contact_name, "Contact Name" %><br>
+      <%= f.text_field :contact_name %>
+     </div>
+
+    <div class="field">
+      <%= f.label :contact_phone, "Contact Phone Number" %><br>
+      <%= f.text_field :contact_phone %>
+     </div>
+
+    <div class="field">
+      <%= f.label :contact_title, "Contact Job Title" %><br>
+      <%= f.text_field :contact_title %>
+     </div>
+
+    <div class="field">
+      <%= f.label :notes, "Notes" %><br>
+      <%= f.text_field :notes %>
+    </div>
+  </td>
+
+  <td align="left">
+    <div id="target" > 
+    <!--  <img src="/images/NoPhoto.jpg" border="6"> -->
+    <%= image_tag @customer.avatar.url %>
+    </div>  
+    <%= f.file_field :avatar %> 
+    <br>
+    <br>
+    </td>
+</tr>
+
+</tbody>
+</table>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+  
+<script>
+
+$(function () {
+    $('#customer_avatar').on('change', function (event) {
+        var files = event.target.files;
+        var image = files[0];
+        console.log(image.size);
+        var reader = new FileReader();
+        reader.onload = function (file) {
+            var img = new Image();
+            console.log(file);
+            img.src = file.target.result;
+            img.width = img.width/2;
+            img.height =img.height/2;
+            img.border=1;
+            $('#target').html(img);
+        };
+        reader.readAsDataURL(image);
+        console.log(files);
+    });
+});
+
+//# sourceURL=pen.js
+</script>

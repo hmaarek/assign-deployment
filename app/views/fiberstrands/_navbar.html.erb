@@ -1,0 +1,4 @@
+<% cbl = Cable.find_by_id(@fiberstrand.cable_id) %>
+<%=link_to cbl.name , location_path(cbl)%> /
+<%=@fiberstrand.name%>
+<hr>

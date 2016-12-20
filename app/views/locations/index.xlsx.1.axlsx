@@ -1,0 +1,7 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "PortMap") do |sheet|
+    sheet.add_row ["Name","Type"]
+  @locations.each do |loc|
+    sheet.add_row [loc.name, loc.location_type]
+  end
+end

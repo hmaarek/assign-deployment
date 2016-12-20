@@ -1,0 +1,115 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Rack Information for <font color="#FF0000"><%=@net_rack.name%></h1></font>
+
+
+
+<div class="image">
+
+<h2><%= @net_rack.location.name %></h2> <h31><%= @net_rack.name %></h31>
+<%=link_to image_tag("/images/CO_b.jpg"), location_path(@net_rack.location)%> <img src="/images/Rack_s.jpg" > <!--style="float:center"-->
+</div>
+
+<style>
+.image { 
+   position: relative; 
+   width: 100%; /* for IE 6 */
+}
+
+h2 { 
+   position: absolute; 
+   top: 2px; 
+   left: 110px; 
+   width: 100%; 
+}
+</style>
+
+
+<style>
+.image { 
+   position: relative; 
+   width: 100%; /* for IE 6 */
+}
+
+h2 { 
+   position: absolute; 
+   top: 163px; 
+   left: 20px; 
+   width: 100%; 
+}
+
+
+h31 { 
+  font: bold 18px/25px Helvetica, Sans-Serif;
+   position: absolute; 
+   top: 163px; 
+   left: 500px; 
+   width: 100%; 
+}
+</style>
+
+<p>
+  <strong>Name:</strong>
+  <%= @net_rack.name %>
+</p>
+
+<p>
+  <strong>Size:</strong>
+  <%= @net_rack.size %>
+</p>
+
+<p>
+  <strong>Location:</strong>
+  <%= @net_rack.location.name %>
+</p>
+<!-- 
+    < %device_count = @net_rack.devices.count %>
+  < % if @net_rack.devices.present? %>
+    < % if device_count>1 %>
+      <h4>There are < %= device_count %> Devices in that Rack</h4>
+    < % else %>
+      <h4>There is < %= device_count %> Device in that Rack</h4>
+    < % end %>
+<!--    < %= link_to "Show Device(s) details", net_rack_devices_path(@net_rack) %> |  -- >
+  < % else %>
+    <font size="1" color="red">No Devices in Rack < %=@net_rack.name%></font><br>
+  < % end %>
+-->
+<hr>  
+    <%devices = Device.where("net_rack_id = " + @net_rack.id.to_s)%>  
+    
+<h3>Listing Devices for Rack: <font color="#FF0000"><%= @net_rack.name %></h3></font>
+<%if @net_rack.devices.count>0%>
+    <table>
+        <tr>
+          <th># </th>
+          <th>Device Name</th>
+          <th>Device Type</th>
+          <th>Number of Ports</th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+      
+        <%i=1%>
+        <% devices.each do |dev| %>
+            <tr>
+            <td align="left"><%=i%></td>
+            <td align="center"><%= link_to dev.name,  [dev]%></td>
+            <td align="center"><%= dev.device_type %></td>
+            <td align="center"><%= dev.devports.count %></td>
+            <%if (logged_in? && current_user.user_type<=1) %>
+                <td><%= link_to image_tag("/images/Edit_s2.png"), edit_device_path(dev)%></td>
+                <td><%= link_to image_tag("/images/Delete_s2.png"), [dev], data: { confirm: "Are you sure?" }, :method => :delete %></td>
+            <%end%>
+            <%i+=1%>
+        </tr>
+        <% end %>
+    </table>
+<%end%>
+<hr>
+
+
+<%= link_to 'Edit', edit_net_rack_path(@net_rack) %> |
+<%= link_to 'Add New Termination Device', new_net_rack_device_path(@net_rack) %> |
+<%= link_to 'List All Racks in '+ @net_rack.location.name , location_net_racks_path(@net_rack.location) %>

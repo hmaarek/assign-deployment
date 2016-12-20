@@ -1,0 +1,38 @@
+<p id="notice"><%= notice %></p>
+<h1>Listing All Users</h1>
+
+<table class="tableIndex">
+  <thead>
+    <tr>
+      <th>User Name</th>
+      <th>User email</th>
+      <th>User Type</th>
+      <th colspan=2>Action</th>
+    </tr>
+  </thead>
+
+    <% @users.each do |user| %>
+
+
+    <%userType = "Viewer"%>
+    <%userType ="SuperUser" if (user.user_type == 1)%>
+    <%userType ="SysAdmin" if (user.user_type == 0)%>
+    
+      <tr>
+        <td align="center"><%= link_to user.name, user %></td>
+
+        <td align="center"><%= link_to user.name, user%></td>
+        <td align="center"><%=user.email %></td>
+        <td align="center"><%=userType %></td>
+        <%if user.user_type != 0)%>  <!-- cannot delete/edit a sysadmin -->
+          <td><%= link_to image_tag("/images/Edit_s2.png"), edit_user_path(cable) %></td>
+          <td><%= link_to image_tag("/images/Delete_s2.png"), user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <%end%>
+      </tr>
+    <% end %>
+
+</table>
+
+<br>
+
+<%= link_to 'Add New Cable', new_cable_path %>

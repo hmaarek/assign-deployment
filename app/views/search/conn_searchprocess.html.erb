@@ -1,0 +1,29 @@
+<h1>Connection Search Results</h1>
+
+
+<%if @count >0%>
+    <hr>
+    Search Found <%=pluralize(@count, "result")%>
+    <br>
+    <!-- < %binding.pry%>
+    < %=params[:msg].html_safe%>
+    -->
+    <table>
+        <th>#</th>
+        <th>Connection ID</th>
+        <th>Connection Status</th>
+        <th>Customer Name</th>
+        <th>From</th>
+        <th>To</th>
+        <th>Backhaul/Feeder Name</th>
+        <!-- <th>Backhaul/Feeder Type</th>  no need as conn may traverese more than one bkh--> 
+        <%=@message.html_safe%>
+    </table>
+    <br>
+<%else%>
+    <br>
+    <h3><font color = "RED">No Results Found !</font></h3> 
+    <br>
+<%end%>
+<hr>
+<%= link_to 'List All Locations', locations_path %>
