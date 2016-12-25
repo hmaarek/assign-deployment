@@ -63,6 +63,7 @@ gem 'bcrypt', '~> 3.1.11'
   
   #migrating to mySQL
   gem 'yaml_db'
+  gem 'mysql'
   
   #similar text comparison
   gem 'similar_text', '~> 0.0.4'

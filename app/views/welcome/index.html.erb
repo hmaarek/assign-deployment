@@ -91,12 +91,12 @@
 <br>
     <div class="col-sm-6" style="background-color:lightblue";>
         <strong>Newly Added Elements Last week:<br></strong>
-        <li><%=Connection.where("created_at BETWEEN  date('now','-7 days') AND date('now')").count%> Connection(s)</li>
-        <li><%=Cable.where("created_at BETWEEN  date('now','-7 days') AND date('now')").count%> Cables(s)</li>
-        <li><%=Fiberstrand.where("created_at BETWEEN  date('now','-7 days') AND date('now')").count%> Fiber(s)</li>
-        <li><%=Devport.where("created_at BETWEEN  date('now','-7 days') AND date('now')").count%> Port(s)</li>
-        <li><%=Customer.where("created_at BETWEEN  date('now','-7 days') AND date('now')").count%> Customer(s)</li>
-        
+        <li><%=Connection.where("created_at BETWEEN  (NOW() - INTERVAL 7 DAY) AND NOW()").count%> Connection(s)</li>
+        <li><%=Cable.where("created_at BETWEEN  (NOW() - INTERVAL 7 DAY) AND NOW()").count%> Cables(s)</li>
+        <li><%=Fiberstrand.where("created_at BETWEEN  (NOW() - INTERVAL 7 DAY) AND NOW()").count%> Fiber(s)</li>
+        <li><%=Devport.where("created_at BETWEEN  (NOW() - INTERVAL 7 DAY) AND NOW()").count%> Port(s)</li>
+        <li><%=Customer.where("created_at BETWEEN  (NOW() - INTERVAL 7 DAY) AND NOW()").count%> Customer(s)</li>
+
         
 
     </div>

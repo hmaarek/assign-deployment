@@ -17,7 +17,7 @@
       <h3>List of Free OUT Ports: </h3><br>
       <div class="field">
         <%@ports_A.each do |prtID|%>
-          <% prt = Devport.find(prtID)%>
+          <% prt = Devport.find(prtID.id)%>
           <%dev = Device.find(prt.device_id)%>
           <br>
           <%=(NetRack.find(dev.net_rack_id)).name%> / <%=dev.name%> .......... (<font color ="OrangeRed"><%=prt.id%></font>) <b>X-[<%=link_to prt.name , prt%>]-O</b> 

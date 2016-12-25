@@ -244,6 +244,7 @@ GEM
     mini_portile2 (2.1.0)
     minitest (5.9.0)
     multi_json (1.12.1)
+    mysql (2.9.1)
     nested_scaffold (1.0.0)
     nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
@@ -383,6 +384,7 @@ DEPENDENCIES
   foundation-rails
   jbuilder (~> 2.0)
   jquery-rails
+  mysql
   nested_scaffold
   paperclip (~> 5.0.0)
   passenger
