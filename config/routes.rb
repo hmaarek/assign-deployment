@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   get 'sessions/new'
 
   get 'users/new'
-
+  
   #get 'backhauls/new'
 
   #get 'connections/new'
@@ -50,6 +50,9 @@ Rails.application.routes.draw do
   #used for batch upload of netwrok data (cables, racks, devices ports, cables...) into the databas
   get 'import/import'
   post 'import/impprocess' =>  'import#impproces'
+  
+  #testing XML reading
+  #get 'import/'
 
 #replaced by a global search command...03Oct2016
   #location search functions...
@@ -61,6 +64,8 @@ Rails.application.routes.draw do
   get    '/login',   to: 'sessions#new'
   post   '/login',   to: 'sessions#create'
   delete '/logout',  to: 'sessions#destroy'
+  
+
 
   resources :connections
   

@@ -22,6 +22,39 @@ class LocationsController < ApplicationController
   # GET /locations/1
   # GET /locations/1.json
   def show
+    
+    #open the KML file
+    @doc = Nokogiri::XML(File.open("public/COs.kml.xml"))
+  
+    #get all Location's coordinates  
+    #this is from: http://stackoverflow.com/questions/14209033/ruby-nokogiri-converting-kml-to-csv
+    @geo_lat=0
+    @geo_lon=0
+    @geo_elv=0
+    maps_key = 'AIzaSyB_vdquEZaUk94_ZkY70xTO-dCexvN6JAs'
+    map_base_url = 'https://www.google.com/maps/embed/v1/place'
+
+    @doc.css('Placemark').each do |placemark|
+      name = placemark.css('name')
+      
+      next if (@location.name.casecmp(name.text) != 0)
+      
+      coordinates = placemark.at_css('coordinates')
+    
+      if name && coordinates
+        #print name.text + ","
+        coordinates.text.split(' ').each do |coordinate|
+          (@geo_lon,@geo_lat,@geo_elv) = coordinate.split(',')
+          
+          
+        @url = map_base_url + '?key=' + maps_key + '&q=' + @geo_lat + ',' + @geo_lon
+          break  #no need to continue, we found it all
+        end
+      end
+    end
+  
+    #binding.pry
+  
   end
 
   # GET /locations/new
