@@ -5,32 +5,12 @@ class Connection < ActiveRecord::Base
 #----------------------------------------------
   def self.import_conn(conn_name, cust_id, conn_stat, conn_util, req_cat, req_id, bkhID, fiberType)
     
-#28Nov2016:
-#check if this is a live/reserved connection, and there exists a connection 
-#  with the same name, in that case, join both connections (don't create)
-
-    conQ=nil
-    
-    if (conn_stat.casecmp("Live")==0  || conn_stat.casecmp("Live_seg")==0 ||  conn_stat.casecmp("Reserved")==0)
-      
-      conQ = self.where("name LIKE '" + conn_name +"'").first
-    end
-      
-    if (!conQ.nil?)
-        
-        connection = conQ
-        
-        if bkhID != conQ.backhaul_id #conn traverses across multi backhauls
-        
-          connection.backhaul_id = bkhID  #use the imported bakhID of course, but log an entry in the junction table
-          
-          BkhConnInter.list_backhaul_connections(conQ.id, bkhID)
-        
-        end
-      
-    else
+#for connections...we only create, allowing for duplicate connection names/IDs
+    #binding.pry
+    #connection = Connection.where("backhaul_id = " + bkhID.to_s  + " AND name LIKE '" + conn_name + "'").first
+    #if connection.nil?
       connection = create ([name: conn_name, customer_id: cust_id, status: conn_stat, description: conn_util, request_category:  req_cat, request_id: req_id, backhaul_id: bkhID]).first
-    
+    #else
       connection.name = conn_name
       connection.customer_id = cust_id
       connection.status = conn_stat
@@ -42,7 +22,7 @@ class Connection < ActiveRecord::Base
 
       connection.save
       
-    end
+    #end
 
     connection.id
   end
@@ -100,7 +80,7 @@ class Connection < ActiveRecord::Base
     cons = Connection.all
     liveCon = 0
     cons.each do |con|
-      liveCon +=1 if ( con.status.casecmp("Live")==0  || con.status.casecmp("Live_seg")==0)
+      liveCon +=1 if con.status.casecmp("Live")==0
     end
     
     liveCon
