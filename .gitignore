@@ -15,3 +15,8 @@
 /log/*
 !/log/.keep
 /tmp
+
+
+#ignore sql data migrations
+/db/*.yml
+
