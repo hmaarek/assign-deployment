@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>COs.kml</name>
+	<Style id="IconStyle009000">
+		<IconStyle>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/shapes/homegardenbusiness.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+		<LabelStyle>
+			<color>ffff0000</color>
+		</LabelStyle>
+		<LineStyle>
+			<color>ffff0000</color>
+			<width>2</width>
+		</LineStyle>
+	</Style>
+	<StyleMap id="IconStyle003000">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#IconStyle0017000</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#IconStyle009000</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="IconStyle0017000">
+		<IconStyle>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/shapes/homegardenbusiness.png</href>
+			</Icon>
+			<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+		</IconStyle>
+		<LabelStyle>
+			<color>ffff0000</color>
+		</LabelStyle>
+		<LineStyle>
+			<color>ffff0000</color>
+			<width>2</width>
+		</LineStyle>
+	</Style>
+	<Folder id="FeatureLayer0">
+		<name>COs</name>
+		<open>1</open>
+		<Snippet maxLines="0"></Snippet>
+		<Placemark>
+			<name>CO24</name>
+			<Snippet maxLines="0"></Snippet>
+			<styleUrl>#IconStyle003000</styleUrl>
+			<Point>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>51.529512,25.286661,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>CO5</name>
+			<Snippet maxLines="0"></Snippet>
+			<styleUrl>#IconStyle003000</styleUrl>
+			<Point>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>51.512177,25.351473,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>CO7</name>
+			<Snippet maxLines="0"></Snippet>
+			<styleUrl>#IconStyle003000</styleUrl>
+			<Point>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>51.521325,25.32088,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>CO18</name>
+			<Snippet maxLines="0"></Snippet>
+			<styleUrl>#IconStyle003000</styleUrl>
+			<Point>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>51.592129,25.161384,0</coordinates>
+			</Point>
+		</Placemark>
+	</Folder>
+</Document>
+</kml>

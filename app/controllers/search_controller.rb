@@ -463,10 +463,25 @@ class SearchController < ApplicationController
 #get search/connectionsearch
   def conn_searchprocess
 
+#binding.pry
+  
+    @message = ""
+    @count=0
+    myquery= params[:q]
+    
+    # very short queries can break the system into infinite loops
+    if (myquery.length < 3)
+      flash.now[:danger] = 'Search Query is too short, cannot be less than 3 characters'
+      render '_form_connsearch'
+      return
+    end
+    
+      
     qres = Connection.where("name LIKE ?", "%" + params[:q] + "%")
 
+
     num=1
-    @message = ""
+    
     bktype = ["B", "F"]
     @count = qres.count
     qres.each do |conn|
@@ -494,7 +509,7 @@ class SearchController < ApplicationController
       @message += "<td align='left'>" + view_context.link_to(conn.name, conn) + "</td>"
       
       color = "Black"
-      color = "OrangeRed" if (conn.status.casecmp("Live")==0)
+      color = "OrangeRed" if (conn.status.casecmp("Live")==0  || conn.status.casecmp("Live_seg")==0)
       color = "Blue" if (conn.status.casecmp("Reserved")==0)
       
       @message += "<td align='left'> <font color =" + color +">" + conn.status + "</font>" + "</td>"

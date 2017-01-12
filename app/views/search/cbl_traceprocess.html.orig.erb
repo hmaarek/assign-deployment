@@ -33,7 +33,7 @@
             <td align = "left"> <%=link_to conn.name, conn%></td>
             <%cstatus = Connection.find_by_id(@connList[indx]).status%>
             <%clr = "BLACK"%>
-            <%if cstatus.casecmp("Live")==0%>
+            <%if (cstatus.casecmp("Live")==0 || status.casecmp("Live_seg")==0)%>
                 <%clr = "RED"%>
             <%elsif cstatus.casecmp("Reserved")==0%>
                 <%clr = "BLUE"%>

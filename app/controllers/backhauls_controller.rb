@@ -50,7 +50,7 @@ class BackhaulsController < ApplicationController
           when "DARK"
             @darkConns += 1
             
-          when "LIVE"
+          when "LIVE", "LIVE_SEG"
             @liveConns +=1 
             
           when "RESERVED"
@@ -96,7 +96,7 @@ class BackhaulsController < ApplicationController
 
           @connHTMLData ="<tr>"
           
-          if connection.status.casecmp("Live")==0
+          if (connection.status.casecmp("Live")==0 || connection.status.casecmp("Live_seg")==0)
             @connHTMLData += "<td align='center'>" + view_context.image_tag('/images/red_light_st.png') + "</td>"
           else
             if connection.status.casecmp("Reserved")==0
@@ -126,7 +126,7 @@ class BackhaulsController < ApplicationController
           end
 
 
-          if connection.status.casecmp("Live")==0
+          if (connection.status.casecmp("Live")==0  || connection.status.casecmp("Live_seg")==0)
             @connHTMLData += "<td align='center'><font color ='OrangeRed'>" + connection.status + "</font></td>"
           else
             if connection.status.casecmp("Reserved")==0
@@ -156,7 +156,7 @@ class BackhaulsController < ApplicationController
         when "DARK"
           @darkHTMLData += @connHTMLData
           
-        when "LIVE"
+        when "LIVE" , "Live_seg"
           @liveHTMLData += @connHTMLData
           
         when "RESERVED"
@@ -250,7 +250,7 @@ class BackhaulsController < ApplicationController
         #totalImplemented[bName] += 1
 
         #4. live connections
-        buildingLiveConns[bName] += 1 if connection.status.casecmp("Live")==0
+        buildingLiveConns[bName] += 1 if (connection.status.casecmp("Live")==0  || connection.status.casecmp("Live_seg")==0)
         
         #5. Reserved connections
         buildingResrvConns[bName] += 1 if connection.status.casecmp("RESERVED")==0
@@ -272,7 +272,7 @@ class BackhaulsController < ApplicationController
             totalP2P[bName] += 1           #------11
 
           #12. sum of P2P & Live
-          (totalLiveP2P[bName] += 1) if connection.status.casecmp("Live")==0        #-------12
+          (totalLiveP2P[bName] += 1) if (connection.status.casecmp("Live")==0 || connection.status.casecmp("Live_seg")==0)      #-------12
 
           #12`. sum of P2P & Reserved
           (totalLiveP2P[bName] += 1) if connection.status.casecmp("RESERVED")==0        #-------12

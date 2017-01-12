@@ -80,7 +80,7 @@ class ImportController < ApplicationController
       #   Ring Name
       #   RFS Status (Yes/No)
       row = Hash[[header, spreadsheet.row(2)].transpose]
-      
+      #binding.pry
       backhaulName = readRowData(row["Name"])  #name of the backhaul/feeder
       backhaulType = readRowData(row["Type"])  #type: B: Backhaul, F: Feeder
       ringName = readRowData(row["Ring Name"])  #Ring name in case of Backhaul only
@@ -102,7 +102,7 @@ class ImportController < ApplicationController
       raise StandardError.new("[Backhaul/Feeder] name cannot be empty") if (backhaulName.nil? || backhaulName.empty?)
       raise StandardError.new("[RFS Stauts] Error (cannot be empty, or other than Yes or No") if (rfsStatus.nil? || rfsStatus.empty? || (rfsStatus.casecmp("Yes")!=0 && rfsStatus.casecmp("No")!=0))
       
-      binding.pry
+      #binding.pry
       raise StandardError.new("Feeders cannot be part of a Ring, Ring name has to be empty for Feeders") if (bkType==1 && (!ringName.nil? && !ringName.empty?))
 
       #create the required ring, if ringName is not empy

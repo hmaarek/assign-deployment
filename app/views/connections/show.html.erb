@@ -47,7 +47,7 @@ h2 {
     <tr>
     <th scope="row">Connection Status</th>
     <%color="Black"%>
-    <%color="OrangeRed" if @connection.status.casecmp("Live")==0%>
+    <%color="OrangeRed" if (@connection.status.casecmp("Live")==0 || @connection.status.casecmp("Live_seg")==0)%>
     <%color="Blue" if @connection.status.casecmp("Reserved")==0%>
     <td></font color = <%=color%>> <%=@connection.status%> </font> </td>
     </tr>

@@ -109,7 +109,7 @@ h2 {
                   <%connName  =conn.name%>
                   <%connStatus  =conn.status%>
                   <%color = "BLACK"%>
-                  <%color = "OrangeRed" if connStatus.casecmp("LIVE")==0%>
+                  <%color = "OrangeRed" if (connStatus.casecmp("LIVE")==0 || connStatus.casecmp("Live_seg")==0) %>
                   <%color = "BLUE" if connStatus.casecmp("RESERVED")==0%>
                   <%customerID  =conn.customer_id%>
                 <%end%>

@@ -11,12 +11,12 @@ class Connection < ActiveRecord::Base
 
     conQ=nil
     
-    if (conn_stat.casecmp("Live")==0 ||  conn_stat.casecmp("Reserved")==0)
+    if (conn_stat.casecmp("Live")==0  || conn_stat.casecmp("Live_seg")==0 ||  conn_stat.casecmp("Reserved")==0)
       
       conQ = self.where("name LIKE '" + conn_name +"'").first
     end
       
-    if (!conq.nil?)
+    if (!conQ.nil?)
         
         connection = conQ
         
@@ -100,7 +100,7 @@ class Connection < ActiveRecord::Base
     cons = Connection.all
     liveCon = 0
     cons.each do |con|
-      liveCon +=1 if con.status.casecmp("Live")==0
+      liveCon +=1 if ( con.status.casecmp("Live")==0  || con.status.casecmp("Live_seg")==0)
     end
     
     liveCon
