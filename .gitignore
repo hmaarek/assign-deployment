@@ -20,3 +20,9 @@
 #ignore sql data migrations
 /db/*.yml
 
+#ignore test bin and vendor
+/test/*
+/bin/*
+/vendor/*
+/lib/*
+
